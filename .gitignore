@@ -1,2 +1,13 @@
 # macOS
 .DS_Store
+
+# API Keys
+.env
+
+# Composer
+vendor/
+
+# Local-only working notes
+opencode.json
+AGENTS.MD
+.agents
