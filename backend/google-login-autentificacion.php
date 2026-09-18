@@ -9,6 +9,7 @@ if (isset($_GET['code'])) {
   // Obtener el perfil del usuario y guardar los tokens para poder persistirlos
   $google_oauth = new Google_Service_Oauth2($client);
   $google_account_info = $google_oauth->userinfo->get();
+  $id = $google_account_info->id;
   $email = $google_account_info->email;
   $name = $google_account_info->name;
   $google_access_token = $token;

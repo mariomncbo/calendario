@@ -8,7 +8,41 @@ require_once __DIR__ . '/../backend/google-login-autentificacion.php';
 if (isset($google_access_token)) {
   $_SESSION['usuario'] = $name;
   $_SESSION['email'] = $email;
+  $_SESSION['google_id'] = $id;
   $_SESSION['google_access_token'] = $google_access_token;
+
+  // Guardar (o actualizar) el usuario y sus tokens en la base de datos
+  require_once __DIR__ . '/../backend/conexion.php';
+  if ($pdo) {
+    try {
+      $access_token_json = json_encode($google_access_token);
+      // Google solo envía refresh_token en el primer consentimiento
+      $refresh_token = $google_access_token['refresh_token'] ?? null;
+      $token_expires_at = date('Y-m-d H:i:s', $google_access_token['created'] + $google_access_token['expires_in']);
+
+      $sql = "
+        INSERT INTO users (google_id, name, email, access_token, refresh_token, token_expires_at)
+        VALUES (:google_id, :name, :email, :access_token, :refresh_token, :token_expires_at)
+        ON DUPLICATE KEY UPDATE
+          name = VALUES(name),
+          email = VALUES(email),
+          access_token = VALUES(access_token),
+          refresh_token = COALESCE(VALUES(refresh_token), refresh_token),
+          token_expires_at = VALUES(token_expires_at)
+      ";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute([
+        ':google_id'        => $id,
+        ':name'             => $name,
+        ':email'            => $email,
+        ':access_token'     => $access_token_json,
+        ':refresh_token'    => $refresh_token,
+        ':token_expires_at' => $token_expires_at,
+      ]);
+    } catch (PDOException $e) {
+      error_log('Error al guardar el usuario en la base de datos: ' . $e->getMessage());
+    }
+  }
 }
 
 // Si el usuario canceló el consentimiento, avisamos por consola en el login
