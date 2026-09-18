@@ -14,6 +14,10 @@ if (isset($google_access_token)) {
   // Guardar (o actualizar) el usuario y sus tokens en la base de datos
   require_once __DIR__ . '/../backend/usuarios.php';
   guardar_usuario_en_bd($id, $name, $email, $google_access_token);
+
+  // Redirigir a una URL limpia (PRG): el código de Google solo vale una vez
+  header("Location: dashboard.php");
+  exit();
 }
 
 // Si el usuario canceló el consentimiento, avisamos por consola en el login
