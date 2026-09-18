@@ -16,7 +16,7 @@ Aplicación Web minimalista para visualizar la semana en curso combinando evento
 - **Base de Datos:** MySQL (Acceso vía PHP PDO con sentencias preparadas).
 
 ## Estructura del Proyecto
-- `index.html` - Landing page pública (explicación de la app y botón de Login con Google).
+- `index.php` - Landing page pública (explicación de la app y botón de Login con Google).
 - `dashboard.php` - Vista principal protegida (Calendario semanal y modal de ajustes).
 - `backend/` - Endpoints PHP y lógica de base de datos/APIs.
 - `frontend/scripts/` - Lógica del cliente en JavaScript.
