@@ -18,6 +18,8 @@ $redirectUri = "http://localhost:8888/calendario/frontend/dashboard.php"; //URL 
   $client->setRedirectUri($redirectUri);
   $client->addScope("email");
   $client->addScope("profile");
+  $client->addScope("https://www.googleapis.com/auth/calendar.events.readonly");
+  $client->addScope("https://www.googleapis.com/auth/tasks.readonly");
 
 
 ?>
