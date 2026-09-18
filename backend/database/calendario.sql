@@ -1,3 +1,8 @@
+DROP SCHEMA IF EXISTS calendario_bd;
+
+CREATE SCHEMA calendario_bd CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE calendario_bd;
+
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     google_id VARCHAR(255) NOT NULL UNIQUE,
@@ -16,4 +21,4 @@ CREATE TABLE users (
     -- Trazabilidad básica
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+);  
