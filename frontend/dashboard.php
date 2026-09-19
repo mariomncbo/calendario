@@ -51,7 +51,7 @@ if (!isset($_SESSION['usuario'])) {
                 <span class="marca-nombre">CALENDARIO</span>
                 <div class="estado-sincronizacion">
                     <span class="punto-estado"></span>
-                    <span class="texto-estado">Sincronizado con Google Calendar</span>
+                    <span class="texto-estado">Sincronizado con Google Calendar y Google Tasks</span>
                 </div>
             </div>
             <nav class="navegacion">
