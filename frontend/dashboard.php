@@ -59,7 +59,9 @@ if (!isset($_SESSION['usuario'])) {
                 <a class="enlace-nav" href="#">Siguiente Semana</a>
             </nav>
             <div class="estado-sincronizacion">
-                <span class="material-symbols-outlined icono-ajustes">settings</span>
+                <button class="boton-ajustes" id="boton_ajustes" aria-label="Abrir ajustes">
+                    <span class="material-symbols-outlined icono-ajustes">settings</span>
+                </button>
             </div>
         </div>
     </header>
@@ -77,6 +79,50 @@ if (!isset($_SESSION['usuario'])) {
     <footer class="pie">
         <div class="barra-pie"></div>
     </footer>
+
+    <!-- Ventana de ajustes (contenido maquetado; sin funcionalidad todavía) -->
+    <div class="fondo-modal" id="fondo_modal">
+        <div class="ventana-modal" id="ventana_modal" role="dialog" aria-modal="true" aria-label="Ajustes">
+            <div class="cabecera-modal">
+                <h2 class="titulo-modal">Ajustes</h2>
+                <button class="boton-cerrar" id="boton_cerrar" aria-label="Cerrar ajustes">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="perfil">
+                <span class="perfil-nombre"><?php echo htmlspecialchars($_SESSION['usuario'] ?? ''); ?></span>
+                <span class="perfil-correo"><?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?></span>
+            </div>
+
+            <div class="seccion-ajustes">
+                <span class="etiqueta-seccion">Modo de color</span>
+                <div class="selector-modo" role="radiogroup" aria-label="Modo de color">
+                    <button class="opcion-modo" role="radio">Claro</button>
+                    <button class="opcion-modo" role="radio">Oscuro</button>
+                    <button class="opcion-modo opcion-modo--activa" role="radio" aria-checked="true">Automático</button>
+                </div>
+            </div>
+
+            <div class="seccion-ajustes">
+                <span class="etiqueta-seccion">Cuenta</span>
+                <div class="lista-acciones">
+                    <a class="accion" href="index.php">
+                        <span class="material-symbols-outlined accion-icono">home</span>
+                        Volver al inicio
+                    </a>
+                    <button class="accion">
+                        <span class="material-symbols-outlined accion-icono">loop</span>
+                        Cambiar de cuenta
+                    </button>
+                    <a class="accion" href="../backend/logout.php">
+                        <span class="material-symbols-outlined accion-icono">logout</span>
+                        Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="scripts/dashboard.js"></script>
 </body>

@@ -19,6 +19,34 @@ const HORA_FIN_RANGO = 24;
 window.onload = function () {
   const rejilla_semana = document.getElementById('rejilla_semana');
   const titulo_semana = document.getElementById('titulo_semana');
+  const boton_ajustes = document.getElementById('boton_ajustes');
+  const boton_cerrar = document.getElementById('boton_cerrar');
+  const fondo_modal = document.getElementById('fondo_modal');
+  const ventana_modal = document.getElementById('ventana_modal');
+
+  // Abrir el modal de ajustes desde el botón del encabezado
+  boton_ajustes.addEventListener('click', function () {
+    fondo_modal.classList.add('fondo-modal--visible');
+  });
+
+  // Cerrar el modal desde la X de la cabecera
+  boton_cerrar.addEventListener('click', function () {
+    fondo_modal.classList.remove('fondo-modal--visible');
+  });
+
+  // Cerrar el modal al pulsar fuera de la ventana (sobre el fondo)
+  fondo_modal.addEventListener('click', function (evento) {
+    if (evento.target === fondo_modal) {
+      fondo_modal.classList.remove('fondo-modal--visible');
+    }
+  });
+
+  // Cerrar el modal con la tecla Escape
+  document.addEventListener('keydown', function (evento) {
+    if (evento.key === 'Escape' && fondo_modal.classList.contains('fondo-modal--visible')) {
+      fondo_modal.classList.remove('fondo-modal--visible');
+    }
+  });
 
   // Pedir los datos reales al backend
   fetch(URL_DATOS)
