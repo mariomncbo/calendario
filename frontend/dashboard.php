@@ -43,6 +43,23 @@ if (!isset($_SESSION['usuario'])) {
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
     <link rel="stylesheet" href="styles/dashboard.css">
+    <script>
+        // Aplicar el tema guardado antes de que pinte la página para evitar
+        // un parpadeo entre el modo claro y el oscuro.
+        (function () {
+            try {
+                var tema = localStorage.getItem('tema') || 'automatico';
+                if (tema === 'automatico') {
+                    tema = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro';
+                }
+                if (tema === 'oscuro') {
+                    document.documentElement.setAttribute('data-tema', 'oscuro');
+                }
+            } catch (error) {
+                // Si no hay acceso a localStorage no pasa nada; se usa claro
+            }
+        })();
+    </script>
 </head>
 <body>
     <header class="encabezado">
@@ -98,9 +115,9 @@ if (!isset($_SESSION['usuario'])) {
             <div class="seccion-ajustes">
                 <span class="etiqueta-seccion">Modo de color</span>
                 <div class="selector-modo" role="radiogroup" aria-label="Modo de color">
-                    <button class="opcion-modo" role="radio">Claro</button>
-                    <button class="opcion-modo" role="radio">Oscuro</button>
-                    <button class="opcion-modo opcion-modo--activa" role="radio" aria-checked="true">Automático</button>
+                    <button class="opcion-modo" data-tema="claro" role="radio">Claro</button>
+                    <button class="opcion-modo" data-tema="oscuro" role="radio">Oscuro</button>
+                    <button class="opcion-modo" data-tema="automatico" role="radio">Automático</button>
                 </div>
             </div>
 

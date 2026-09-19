@@ -24,6 +24,64 @@ window.onload = function () {
   const fondo_modal = document.getElementById('fondo_modal');
   const ventana_modal = document.getElementById('ventana_modal');
 
+  // --- Preferencia de tema (claro / oscuro / automático) ---
+  const CLAVE_TEMA = 'tema';
+  const opciones_modo = document.querySelectorAll('.opcion-modo');
+  const tema_guardado = localStorage.getItem(CLAVE_TEMA) || 'automatico';
+
+  /**
+   * Resuelve la preferencia guardada a 'claro' u 'oscuro'.
+   * El modo 'automatico' sigue la preferencia del sistema.
+   *
+   * @param {string} tema  Preferencia ('claro', 'oscuro' o 'automatico').
+   * @return {string}      Tema real aplicable ('claro' o 'oscuro').
+   */
+  function resolver_tema(tema) {
+    if (tema === 'claro' || tema === 'oscuro') {
+      return tema;
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro';
+  }
+
+  /**
+   * Aplica el tema resolviendo la preferencia y marca la opción activa
+   * en el selector del modal de ajustes.
+   *
+   * @param {string} tema  Preferencia a aplicar.
+   */
+  function aplicar_tema(tema) {
+    document.documentElement.setAttribute('data-tema', resolver_tema(tema));
+
+    opciones_modo.forEach((opcion) => {
+      const es_activa = opcion.dataset.tema === tema;
+      opcion.classList.toggle('opcion-modo--activa', es_activa);
+      if (es_activa) {
+        opcion.setAttribute('aria-checked', 'true');
+      } else {
+        opcion.removeAttribute('aria-checked');
+      }
+    });
+  }
+
+  // Aplicar el tema guardado al cargar la página
+  aplicar_tema(tema_guardado);
+
+  // Cambiar el tema al pulsar una opción del selector
+  opciones_modo.forEach((opcion) => {
+    opcion.addEventListener('click', function () {
+      localStorage.setItem(CLAVE_TEMA, opcion.dataset.tema);
+      aplicar_tema(opcion.dataset.tema);
+    });
+  });
+
+  // Si el modo es automático, reaccionar a cambios del sistema mientras
+  // la ventana esté abierta
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+    if (localStorage.getItem(CLAVE_TEMA) === 'automatico') {
+      aplicar_tema('automatico');
+    }
+  });
+
   // Abrir el modal de ajustes desde el botón del encabezado
   boton_ajustes.addEventListener('click', function () {
     fondo_modal.classList.add('fondo-modal--visible');
