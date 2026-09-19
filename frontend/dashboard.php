@@ -37,14 +37,16 @@ if (!isset($_SESSION['usuario'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
 </head>
 <body>
     <h1>DASHBOARD</h1>
   <div class="perfil">
     <h2>Bienvenido <?php echo $_SESSION['usuario'] ?></h2>
     <h3><?php echo $_SESSION['email']?></h3>
-    <a href="logout.php">Cerrar sesión</a>
+    <a href="../backend/logout.php">Cerrar sesión</a>
+    <br>
+    <a href="index.php">Volver a la página de inicio</a>
   </div>
 </body>
 </html>
