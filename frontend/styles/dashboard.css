@@ -361,31 +361,72 @@ a {
 }
 
 /* ------------------------------------------------------------
-   Lista de eventos
+   Línea de tiempo diaria (bloques por duración)
    ------------------------------------------------------------ */
-.lista-eventos {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-sm);
-  flex: 1;
-}
-
-.evento {
+.franja-todo-dia {
   display: flex;
   flex-direction: column;
   gap: var(--espacio-xs);
-  padding: var(--espacio-sm);
+  padding: 0 var(--espacio-xs) var(--espacio-sm);
+}
+
+.evento--todo-dia {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-xs);
+  padding: var(--espacio-xs) var(--espacio-sm);
   border-radius: var(--radio-lg);
   background-color: var(--superficie-mas-baja);
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
-.evento-hora-lista {
-  display: flex;
-  align-items: center;
-  gap: var(--espacio-xs);
+.evento--todo-dia .evento-titulo {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
 }
 
+.linea-tiempo {
+  position: relative;
+  height: var(--altura-linea, 480px);
+  overflow: hidden;
+}
+
+.evento--franja {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  padding: var(--espacio-xs) var(--espacio-sm);
+  border-left: 2px solid var(--secundario);
+  border-radius: var(--radio-lg);
+  background-color: var(--superficie-mas-baja);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.evento--franja .evento-titulo {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 15px;
+  color: var(--primario);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.evento-franja-hora {
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 12px;
+  letter-spacing: 0.06em;
+  color: var(--secundario);
+}
+
+/* Punto de color reutilizado en los chips de día completo */
 .punto-evento {
   width: 6px;
   height: 6px;
@@ -400,33 +441,29 @@ a {
   background-color: var(--contorno);
 }
 
-.evento-hora {
+/* ------------------------------------------------------------
+   Sección de tareas por día
+   ------------------------------------------------------------ */
+.seccion-tareas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-sm);
+  margin-top: var(--espacio-md);
+  padding-top: var(--espacio-md);
+  border-top: 1px solid var(--contorno-variante);
+}
+
+.titulo-seccion-tareas {
   font-size: 10px;
   font-weight: 600;
   line-height: 14px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em; /* tracking-wider */
+  text-transform: uppercase;
   color: var(--contorno);
 }
 
-.evento-hora--hoy {
-  color: var(--secundario);
-  font-weight: 600;
-}
-
-.evento-titulo {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 20px;
-  color: var(--primario);
-}
-
-.evento-detalle {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
-  letter-spacing: 0.005em;
-  color: var(--texto-variante);
+.evento--tarea {
+  background-color: var(--superficie-baja);
 }
 
 /* ------------------------------------------------------------

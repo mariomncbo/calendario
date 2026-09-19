@@ -16,6 +16,11 @@ $redirectUri = "http://localhost:8888/calendario/frontend/dashboard.php"; //URL 
   $client->setClientId($clientID);
   $client->setClientSecret($clientSecret);
   $client->setRedirectUri($redirectUri);
+  // Acceso offline: pedir refresh_token para renovar el access_token sin re-login.
+  // setPrompt('consent') fuerza a que Google entregue el refresh_token en cada
+  // primer consentimiento (solo se muestra el aviso la primera vez).
+  $client->setAccessType("offline");
+  $client->setPrompt("consent");
   $client->addScope("email");
   $client->addScope("profile");
   $client->addScope("https://www.googleapis.com/auth/calendar.events.readonly");
