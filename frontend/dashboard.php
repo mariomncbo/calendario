@@ -44,6 +44,7 @@ if (!isset($_SESSION['usuario'])) {
   <div class="perfil">
     <h2>Bienvenido <?php echo $_SESSION['usuario'] ?></h2>
     <h3><?php echo $_SESSION['email']?></h3>
+    <a href="logout.php">Cerrar sesión</a>
   </div>
 </body>
 </html>
