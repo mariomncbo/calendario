@@ -32,6 +32,7 @@ window.onload = function () {
       if (!datos.success) {
         throw new Error('La API devolvió un error: ' + JSON.stringify(datos.errores));
       }
+
       renderizar_semana(datos, rejilla_semana, titulo_semana);
     })
     .catch((error) => {
@@ -81,9 +82,10 @@ function renderizar_semana(datos, rejilla, titulo) {
     const fecha = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + i);
     const dia_iso = formatear_fecha_iso(fecha);
     const eventos = datos.eventos.filter((evento) => evento.dia === dia_iso);
+    const tareas = datos.tareas.filter((tarea) => tarea.dia === dia_iso);
 
     rejilla.appendChild(
-      crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, hay_timeline, rango_inicio_min, rango_min_totales)
+      crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, hay_timeline, rango_inicio_min, rango_min_totales)
     );
   }
 }
@@ -96,12 +98,13 @@ function renderizar_semana(datos, rejilla, titulo) {
  * @param {string} dia_iso             Fecha en formato Y-m-d.
  * @param {string} hoy_iso             Fecha de hoy en formato Y-m-d.
  * @param {Array} eventos              Eventos de Google Calendar del día.
+ * @param {Array} tareas               Tareas de Google Tasks con vencimiento ese día.
  * @param {boolean} hay_timeline       Si la semana tiene eventos con hora.
  * @param {number} rango_inicio_min    Inicio del rango horario en minutos.
  * @param {number} rango_min_totales   Duración del rango en minutos.
  * @return {HTMLElement}               Tarjeta de día lista para insertar.
  */
-function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, hay_timeline, rango_inicio_min, rango_min_totales) {
+function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, hay_timeline, rango_inicio_min, rango_min_totales) {
   const tarjeta = document.createElement('article');
   tarjeta.className = 'tarjeta-dia';
 
@@ -159,7 +162,7 @@ function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, hay_timeline, rango
   if (es_hoy) {
     contador_dia.classList.add('contador-dia--hoy');
   }
-  contador_dia.textContent = calcular_texto_contador(eventos.length);
+  contador_dia.textContent = calcular_texto_contador(eventos.length + tareas.length);
 
   cabecera.appendChild(contenedor_nombre);
   cabecera.appendChild(contador_dia);
@@ -180,7 +183,58 @@ function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, hay_timeline, rango
     );
   }
 
+  // --- Sección de tareas de Google Tasks (si el día tiene) ---
+  if (tareas.length > 0) {
+    tarjeta.appendChild(crear_seccion_tareas(tareas));
+  }
+
   return tarjeta;
+}
+
+/**
+ * Crea la sección de tareas de un día: un título y una fila por tarea.
+ *
+ * @param {Array} tareas  Tareas de Google Tasks del día.
+ * @return {HTMLElement}  Contenedor de la sección de tareas.
+ */
+function crear_seccion_tareas(tareas) {
+  const seccion = document.createElement('div');
+  seccion.className = 'seccion-tareas';
+
+  const titulo = document.createElement('span');
+  titulo.className = 'titulo-seccion-tareas';
+  titulo.textContent = 'Tareas';
+
+  seccion.appendChild(titulo);
+
+  tareas.forEach((tarea) => {
+    const fila = document.createElement('div');
+    fila.className = 'evento--tarea';
+
+    const punto = document.createElement('span');
+    punto.className = 'punto-evento punto-evento--contorno';
+
+    const texto = document.createElement('div');
+    texto.className = 'evento--tarea-texto';
+
+    const titulo_tarea = document.createElement('span');
+    titulo_tarea.className = 'evento-titulo';
+    titulo_tarea.textContent = tarea.titulo;
+    texto.appendChild(titulo_tarea);
+
+    if (tarea.detalle) {
+      const detalle = document.createElement('span');
+      detalle.className = 'evento-tarea-detalle';
+      detalle.textContent = tarea.detalle;
+      texto.appendChild(detalle);
+    }
+
+    fila.appendChild(punto);
+    fila.appendChild(texto);
+    seccion.appendChild(fila);
+  });
+
+  return seccion;
 }
 
 /**

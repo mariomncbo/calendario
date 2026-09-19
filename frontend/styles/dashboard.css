@@ -276,17 +276,30 @@ a {
 
 /* Día actual (HOY) */
 .tarjeta-dia--hoy {
+  position: relative;
   background-color: rgba(208, 229, 208, 0.2);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
+/* Franja de color superior para resaltar el día actual */
+.tarjeta-dia--hoy::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--espacio-sm);
+  right: var(--espacio-sm);
+  height: 3px;
+  border-radius: 0 0 var(--radio-lg) var(--radio-lg);
+  background-color: var(--secundario);
+}
+
 /* Fin de semana (sin agenda) */
 .tarjeta-dia--fin-de-semana {
-  background-color: rgba(245, 244, 240, 0.4);
+  background-color: rgba(219, 218, 214, 0.5);
 }
 
 .tarjeta-dia--fin-de-semana:hover {
-  background-color: rgba(245, 244, 240, 0.6);
+  background-color: rgba(219, 218, 214, 0.7);
 }
 
 .cabecera-dia {
@@ -463,7 +476,32 @@ a {
 }
 
 .evento--tarea {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-xs);
+  padding: var(--espacio-xs) var(--espacio-sm);
+  border-radius: var(--radio-lg);
   background-color: var(--superficie-baja);
+}
+
+.evento--tarea .evento-titulo {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--primario);
+}
+
+.evento--tarea-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.evento-tarea-detalle {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 14px;
+  color: var(--contorno);
 }
 
 /* ------------------------------------------------------------
