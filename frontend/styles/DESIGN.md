@@ -1,6 +1,7 @@
 ---
 name: Nordic Zen Calendar
 colors:
+  background: '#faf9f5'
   surface: '#faf9f5'
   surface-dim: '#dbdad6'
   surface-bright: '#faf9f5'
@@ -11,43 +12,20 @@ colors:
   surface-container-highest: '#e3e2df'
   on-surface: '#1b1c1a'
   on-surface-variant: '#444844'
-  inverse-surface: '#30312e'
-  inverse-on-surface: '#f2f1ed'
   outline: '#757873'
   outline-variant: '#c4c7c2'
-  surface-tint: '#5b5f5b'
   primary: '#202420'
   on-primary: '#ffffff'
   primary-container: '#353935'
   on-primary-container: '#9fa29d'
-  inverse-primary: '#c4c7c2'
   secondary: '#506353'
   on-secondary: '#ffffff'
   secondary-container: '#d0e5d0'
   on-secondary-container: '#546757'
-  tertiary: '#2b2113'
-  on-tertiary: '#ffffff'
-  tertiary-container: '#413626'
-  on-tertiary-container: '#af9f8a'
   error: '#ba1a1a'
   on-error: '#ffffff'
   error-container: '#ffdad6'
   on-error-container: '#93000a'
-  primary-fixed: '#e0e3dd'
-  primary-fixed-dim: '#c4c7c2'
-  on-primary-fixed: '#191d19'
-  on-primary-fixed-variant: '#444844'
-  secondary-fixed: '#d3e8d3'
-  secondary-fixed-dim: '#b7ccb8'
-  on-secondary-fixed: '#0e1f12'
-  on-secondary-fixed-variant: '#394b3c'
-  tertiary-fixed: '#f2e0c9'
-  tertiary-fixed-dim: '#d5c4ae'
-  on-tertiary-fixed: '#231a0c'
-  on-tertiary-fixed-variant: '#514535'
-  background: '#faf9f5'
-  on-background: '#1b1c1a'
-  surface-variant: '#e3e2df'
 typography:
   headline-xl:
     fontFamily: Plus Jakarta Sans
@@ -124,90 +102,85 @@ spacing:
 
 ## Brand & Style
 
-This design system embodies Nordic Zen and Organic Minimalism, designed specifically for a full-screen desktop weekly calendar that transforms time management into a contemplative, architectural ritual. The aesthetic avoids cold tech tropes and chaotic scheduling dashboards, grounding the user in tranquility, spaciousness, and deliberate focus.
+This design system embodies Nordic Zen and Organic Minimalism, designed for a personal weekly calendar that transforms time management into a contemplative ritual. The aesthetic avoids cold tech tropes, grounding the user in tranquility, spaciousness, and deliberate focus.
 
-### Personality & Emotional Tenor
-- **Tranquil & Grounded:** Emits an immediate physiological sigh of relief upon viewing. The atmosphere feels more like a sunlit Scandinavian gallery or a stone tea room than an administrative productivity utility.
-- **Architectural Precision:** Every column, time-marker, and event block relates harmoniously to an intentional, tectonic spatial rhythm.
-- **Organic Restraint:** Tactile micro-borders, muted chalk-and-stone tonal relationships, and subdued sage accents produce an environment of quiet, understated luxury.
-
-### Target Audience
-Creative directors, architects, writers, and executives who value clarity over clutter, intentional pacing over frantic multitasking, and craftsmanship in digital everyday tools.
+The interface relies on tactile micro-borders, muted chalk-and-stone tone relationships, and subdued sage accents: an environment of quiet, understated craftsmanship.
 
 ## Colors
 
-The color palette draws directly from Nordic limestone, unbleached linen, weathered slate, and muted boreal flora. 
+The palette draws from Nordic limestone, unbleached linen, weathered slate, and muted boreal flora.
 
-- **Primary (`#353935` - Muted Charcoal):** Replaces harsh pure black. Used for high-emphasis typography, primary actions, and anchor strokes.
-- **Secondary (`#768A78` - Soft Sage):** A tranquil, desaturated herbal green used for active state indications, focus highlights, current time indicators, and restorative scheduling blocks.
-- **Tertiary (`#A99985` - Warm Stone / Earth):** An organic warm sand accent for secondary tags, deadlines, and subtle categorical groupings.
-- **Neutral (`#F7F6F2` - Bone White / Alabaster):** The atmospheric canvas base that provides physical warmth without turning yellow or sterile blue.
+- **Primary (`#202420` — Muted Charcoal):** High-emphasis typography, active states, and primary actions.
+- **Secondary (`#506353` / `#d0e5d0` — Soft Sage):** Current-day highlight, today badge, and event accent indicator.
+- **Canvas (`#faf9f5` — Warm Bone):** Atmospheric background base.
+- **Text:** `#1b1c1a` (main) and `#444844` (variant or muted).
 
 ### Functional Tonal Hierarchy
-- **Canvas Base:** `#F7F6F2` (Warm Bone)
-- **Sub-surface / Column Wells:** `#EFECE6` (Pale Limestone)
-- **Card & Active Blocks:** `#FFFFFF` (Pure Uncoated Paper)
-- **Micro-borders / Grid Lines:** `#E4E0D7` (Linen Weft)
-- **Muted Text / Time Guides:** `#8A8780` (Dry Clay)
+- **Canvas Base:** `#faf9f5` (Warm Bone)
+- **Sub-surface / Card Wells:** `#efeeea` (Pale Limestone), hover `#e9e8e4`
+- **Card & Active Blocks:** `#ffffff` (Pure Uncoated Paper)
+- **Micro-borders / Grid Lines:** `#e9e8e4` – `#c4c7c2` (Linen Weft)
+- **Muted Text / Time Guides:** `#757873` (Dry Clay)
 
 ## Typography
 
-The type system relies on **Plus Jakarta Sans** across all roles to achieve a sculptural, contemporary humanist balance. Its wide apertures, clean geometric geometry, and gentle modern curves echo mid-century Scandinavian furniture design.
+The type system relies on **Plus Jakarta Sans** across all roles.
 
-### Hierarchy & Treatment
-- **Headlines:** Set in light and regular weights (`400`–`500`) with tight tracking (`-0.03em`) to mimic architectural inscriptions and gallery title walls.
-- **Body:** Open, serene, and legible with standard tracking, delivering fatigue-free reading across dense weekly schedules.
-- **Labels & Temporal Markers:** Slightly elevated tracking (`+0.04em` to `+0.06em`) in semi-bold weights (`600`) to guarantee high-scan precision for hours, dates, and status tags without shouting.
+- **Headlines:** Light and regular weights (`400`–`500`) with tight tracking (`-0.03em` to `-0.015em`).
+- **Body:** Open and legible with standard tracking for fatigue-free reading across dense weekly schedules.
+- **Labels & Temporal Markers:** Elevated tracking (`+0.02em` to `+0.06em`) in semi-bold (`600`) for high-scan precision on hours, dates, and status tags.
 
 ## Layout & Spacing
 
-The layout treats the desktop viewport as a full-screen architectural plan, employing a responsive 7-column day layout bookended by an ultra-slim, ambient time-ruler rail and optional collapsible context sidebar.
+The layout is a single full-width weekly grid of 7 day columns.
 
-### Layout Mechanics
-- **Full-Screen Canvas:** The viewport runs 100vh with a structural framing margin (`margin: 2rem`).
-- **Calendar Grid:** The 7-column weekly matrix uses dedicated calendar gutters (`gutter-calendar: 0.5rem`), creating hairline vertical divisions between daily timelines.
-- **Temporal Rhythm:** Vertical row increments strictly follow a 60-minute cadence mapped to `space-xl` (40px base line-height) or `48px` intervals with micro-subdivisions at 15-minute intervals.
-- **Safe Padding:** Calendar events never touch their container borders; interior padding enforces `space-xs` (vertical) and `space-sm` (horizontal) margins to preserve breathing space.
+- **Desktop (≥768px):** `grid-template-columns: repeat(7, ...)`; outer margins `margin` (`2rem`), gutters between columns `gutter-calendar` (`0.5rem`).
+- **Mobile (<768px):** Strict single-column stack; margins condense to `margin-compact` (`1.25rem`).
+- **Timeline cadence:** Vertical rhythm at 40px per hour; the timeline always ends at 24:00 and its height adapts to the earliest event.
+- Spacing obeys 4px/8px modular leaps: `space-xs` (4px) for micro tags, `space-sm` (8px) for event padding, `space-md` (14px) for container insets, `space-lg` (24px) for section separation.
 
 ## Elevation & Depth
 
-This system intentionally rejects synthetic drop shadows and diffuse multi-colored blurs, choosing instead **Tactile Micro-Borders** combined with **Tonal Surface Layering**.
+This system intentionally rejects synthetic drop shadows and diffuse blurs, choosing **Tactile Micro-Borders** combined with **Tonal Surface Layering**.
 
-### Architectural Planarity
-- **Base Canvas (Level 0):** `#F7F6F2` (Matte, non-reflective warm stone floor).
-- **Day Columns / Track Wells (Level 1):** `#EFECE6` recessed background, partitioned by a 1px solid stroke in `#E4E0D7`.
-- **Event Containers (Level 2):** Pure `#FFFFFF` fill resting on the track, bound by a crisp 1px tactile border in `#DDD8CE`.
-- **Active & Drag States (Level 3):** When moving an event or opening an inspector, the element utilizes a whisper shadow: `0 4px 16px rgba(53, 57, 53, 0.04), 0 1px 2px rgba(53, 57, 53, 0.03)` with a slightly darkened border `#C8C3B8`.
-- **Now Indicator:** A clean 1px hairline horizontal beam in `#768A78` with an anchored 5px solid circular pivot pin.
+- **Layer 0 (Canvas):** `#faf9f5` matte warm stone base.
+- **Layer 1 (Day track wells):** `#efeeea` recessed background with 1px strokes in `#e9e8e4`/`#c4c7c2`.
+- **Layer 2 (Cards & event blocks):** Pure `#ffffff` fill with a crisp 1px tactile border.
+- **Layer 3 (Modal overlay):** Dimmed backdrop `rgba(27, 28, 26, 0.5)` with a 4px blur; whispers shadows reserved for the floating dialog: `0 4px 16px rgba(53, 57, 53, 0.04), 0 1px 2px rgba(53, 57, 53, 0.03)`.
+- **Now/today indicator:** A clean 3px sage beam on top of the current day card.
 
 ## Shapes
 
-The design system maintains a **Soft (`1`)** roundedness profile to project discipline, structural calm, and architectural restraint. 
+A **Soft** roundedness profile for discipline and structural calm.
 
-- **Base Radius (`0.25rem` / 4px):** Applied to individual event blocks, badges, input fields, and hover states.
-- **Card & Modal Radius (`0.5rem` / 8px):** Applied to floating detail panels, modal dialogs, and popovers.
-- **Pills / Radii Override:** Reserved strictly for categorical status indicators and the current date badge indicator to offer a soft, natural focal contrast against orthogonal calendar lines.
+- **Base Radius (`0.25rem`):** Chips, timeline event blocks, buttons, and hover states.
+- **Card & Modal Radius (`0.5rem`):** Day cards and the settings dialog.
+- **Pills (`full`):** Reserved for the today badge and the sync status dot.
 
 ## Components
 
+### Header
+Fixed top bar with a 24px backdrop blur. Contains the brand mark, the Google sync status (a small secondary dot + label), navigation links, and a settings icon button. On light, the header is separated by a soft shadow instead of a hard border.
+
 ### Buttons
-- **Primary:** Solid `#353935` background, `#F7F6F2` text, 0.25rem radius. Subtle hover state transition to `#242624` with zero shift.
-- **Secondary / Ghost:** Transparent background, 1px `#DDD8CE` border, `#353935` text. On hover, fills with `#EFECE6`.
-- **Text Action:** Unbordered, `#8A8780` text, transitioning to `#353935` with an understated bottom hairline underline.
+- **Icon Buttons (settings, close):** Borderless, 18px icon in `outline`. Hover shifts to the `#efeeea` surface. Focus is a crisp 1px `outline` ring without browser glows.
+- **Segmented Color Mode Selector:** Options split by a 1px hairline. The active option inverts to `primary` (`#202420`) with `on-primary` text.
+- **Account Actions:** Full-width rows; hairline top border between rows; icons in `outline`; hover on `#efeeea`.
 
-### Calendar Event Blocks
-- **Standard Entry:** Pure white fill, 1px micro-border in `#E4E0D7`, padded with `space-sm` around `body-sm` text. Left accent indicator is an integrated 2.5px vertical bar colored in muted sage (`#768A78`) or warm stone (`#A99985`).
-- **Tentative / Focus Time:** Muted limestone fill (`#EFECE6`) with a dashed 1px border `#DDD8CE` and slate typography.
-- **Active / Selected:** Crisp charcoal hairline border (`#353935`) and an imperceptible warm glow.
+### Day Cards
+Cards stack the header (uppercase day name, day number, `HOY` badge, commitment counter), all-day events, the timeline, and the tasks section.
 
-### Chips & Badges
-- Compact height (20px), `label-sm` uppercase type, 100px pill radius, tinted in 10% opacity soft sage or warm stone with 1px tonal boundary outlines.
+- **Today:** Sage top bar, faint sage background (`rgba(208, 229, 208, 0.2)`), bolder day number, `HOY` pill.
+- **Weekend:** Muted translucent background (`rgba(219, 218, 214, 0.5)`).
 
-### Inputs & Date Selectors
-- Flat bone white surface, 1px `#DDD8CE` perimeter outline, 4px corner radius. On focus: `#353935` border stroke without heavy rings or chromatic halos.
+### All-Day Chips
+Compact 20px-high rows with a `label-sm` title and a 6px secondary dot indicator, on the `#ffffff` elevated surface with a 4px radius.
 
-### Checkboxes & Radios
-- Small, custom square and circular geometries (14px × 14px) bordered in 1px `#8A8780`. Filled with `#768A78` and a chalk-white minimalist checkmark when selected.
+### Timeline Event Blocks
+Absolute blocks positioned proportionally to event duration across the shared timeline. A left-aligned 2px sage accent bar signals the calendar origin. Time reads in `label-sm` secondary; the title is clamped to 2 lines. Overlapping events share the column width side by side.
 
-### Inspector / Detail Drawer
-- Side-docked architectural panel anchored to the right viewport. Flat `#FFFFFF` surface with a continuous 1px left boundary in `#E4E0D7`, using spacious `space-lg` vertical stack groupings for event metadata, notes, and participants.
+### Tasks Section
+Hairline top border, uppercase `label-sm` heading, and one row per task with a muted `outline` dot, title, and optional detail line.
+
+### Settings Modal
+Centered dialog (max 420px) with an `0.5rem` radius on the `#ffffff` surface. Shows the user profile (name + email), the color mode segmented selector, and the account actions. Closes via button, backdrop click, or Escape.

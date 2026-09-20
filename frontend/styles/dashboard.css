@@ -75,53 +75,124 @@
 }
 
 /* ============================================================
-   Tema oscuro · Paleta "Nordic Zen" nocturna
+   Tema oscuro · "Atelier Chronos Dark"
+   Obsidiana + hairlines zinc + tipografía cálida
    Se activa con data-tema="oscuro" en el elemento <html>
    ============================================================ */
 :root[data-tema='oscuro'] {
   color-scheme: dark;
 
-  /* Colores: base (carbón-piedra) */
-  --fondo: #121411;
-  --superficie: #121411;
-  --superficie-oscura: #0a0c0a;
-  --superficie-brillante: #121411;
-  --superficie-mas-baja: #0b0d0a;
-  --superficie-baja: #191b17;
-  --superficie-media: #1f211d;
-  --superficie-alta: #292b26;
-  --superficie-mas-alta: #343630;
-  --texto-principal: #e2e3de;
-  --texto-variante: #c4c7c2;
-  --contorno: #8f938c;
-  --contorno-variante: #444944;
+  /* Colores: base (canvas obsidiana) */
+  --fondo: #0a0a0c;
+  --superficie: #0a0a0c;
+  --superficie-oscura: #0a0a0c;
+  --superficie-brillante: #0a0a0c;
+  --superficie-mas-baja: #18181b; /* contenedores elevados: eventos y modales */
+  --superficie-baja: #121214;    /* paneles, filas y tarjetas */
+  --superficie-media: #18181b;   /* estados interactivos / hover */
+  --superficie-alta: #1d1d20;
+  --superficie-mas-alta: #27272a;
+  --texto-principal: #f4f4f5;
+  --texto-variante: #e4e4e7;
+  --contorno: #a1a1aa;
+  --contorno-variante: #27272a; /* hairline estructural */
+
+  /* Tipografía: Geist con cifras tabulares */
+  --fuente: 'Geist', 'Plus Jakarta Sans', sans-serif;
+
+  /* Radios: geometría técnica de 4px para elementos pequeños */
+  --radio-base: 0.25rem;
 
   /* Fondos translúcidos del tema oscuro */
-  --fondo-encabezado: rgba(18, 20, 17, 0.9);
-  --fondo-fila-titulo: rgba(18, 20, 17, 0.6);
-  --fondo-tarjeta: rgba(31, 33, 29, 0.7);
-  --fondo-tarjeta-hoy: rgba(185, 204, 184, 0.12);
-  --fondo-tarjeta-fin-de-semana: rgba(10, 12, 10, 0.45);
-  --fondo-tarjeta-fin-de-semana-hover: rgba(10, 12, 10, 0.65);
-  --fondo-pie: rgba(11, 13, 10, 0.6);
+  --fondo-encabezado: rgba(10, 10, 12, 0.9);
+  --fondo-fila-titulo: rgba(10, 10, 12, 0.6);
+  --fondo-tarjeta: rgba(24, 24, 27, 0.7);
+  --fondo-tarjeta-hoy: rgba(161, 161, 170, 0.08);
+  --fondo-tarjeta-fin-de-semana: rgba(10, 10, 12, 0.4);
+  --fondo-tarjeta-fin-de-semana-hover: rgba(10, 10, 12, 0.6);
+  --fondo-pie: rgba(10, 10, 12, 0.6);
 
-  /* Colores: primario (ceniza clara) */
-  --primario: #c4c7c2;
-  --sobre-primario: #1b1c1a;
-  --contenedor-primario: #333732;
-  --sobre-contenedor-primario: #e0e3dd;
+  /* Colores: primario (blanco cálido invertido) */
+  --primario: #f4f4f5;
+  --sobre-primario: #0a0a0c;
+  --contenedor-primario: #e2e2e3;
+  --sobre-contenedor-primario: #171719;
 
-  /* Colores: secundario (salvia nocturna) */
-  --secundario: #b7ccb8;
-  --sobre-secundario: #223426;
-  --contenedor-secundario: #394b3c;
-  --sobre-contenedor-secundario: #d3e8d3;
+  /* Colores: secundario (tiza acentuada) */
+  --secundario: #c6c6c9;
+  --sobre-secundario: #0a0a0c;
+  --contenedor-secundario: #45464e;
+  --sobre-contenedor-secundario: #b4b4bd;
 
   /* Colores: estado de error */
   --error: #ffb4ab;
   --sobre-error: #690005;
   --contenedor-error: #93000a;
   --sobre-contenedor-error: #ffdad6;
+}
+
+/* ------------------------------------------------------------
+   Tema oscuro · Componentes
+   Elevación por capas tonales y hairlines, sin sombras
+   ------------------------------------------------------------ */
+
+/* Encabezado: panel flotante con borde de separación */
+:root[data-tema='oscuro'] .encabezado {
+  border-bottom: 1px solid var(--contorno-variante);
+  box-shadow: none;
+}
+
+/* Tarjetas de día: contenedor elevado con hairline */
+:root[data-tema='oscuro'] .tarjeta-dia {
+  border: 1px solid var(--contorno-variante);
+  box-shadow: none;
+}
+
+/* Día actual: el borde pasa al acento zinc */
+:root[data-tema='oscuro'] .tarjeta-dia--hoy {
+  border-color: var(--contorno);
+  box-shadow: none;
+}
+
+/* Bloques de evento: contenedores elevados con hairline.
+   Se conserva la guía izquierda de 2px como indicador de origen */
+:root[data-tema='oscuro'] .evento--todo-dia {
+  border: 1px solid var(--contorno-variante);
+  box-shadow: none;
+}
+
+:root[data-tema='oscuro'] .evento--franja {
+  border: 1px solid var(--contorno-variante);
+  border-left: 2px solid var(--secundario);
+  box-shadow: none;
+}
+
+/* Modal: capa 3, escudo difuminado y sombra solo para overlays */
+:root[data-tema='oscuro'] .fondo-modal {
+  background-color: rgba(10, 10, 12, 0.8);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+:root[data-tema='oscuro'] .ventana-modal {
+  border: 1px solid #3f3f46;
+  box-shadow: 0 8px 32px -4px rgb(0 0 0 / 0.6);
+}
+
+/* Tipografía · Numeración tabular para fechas, horas y contadores */
+:root[data-tema='oscuro'] .titulo-semana,
+:root[data-tema='oscuro'] .numero-dia,
+:root[data-tema='oscuro'] .evento-franja-hora,
+:root[data-tema='oscuro'] .contador-dia {
+  font-feature-settings: 'tnum' 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Enfoque: borde nítido en zinc en lugar del glow del navegador */
+:root[data-tema='oscuro'] button:focus-visible,
+:root[data-tema='oscuro'] a:focus-visible {
+  outline: 1px solid var(--contorno);
+  outline-offset: 2px;
 }
 
 /* ------------------------------------------------------------
@@ -445,7 +516,7 @@ a {
   font-weight: 600;
   line-height: 14px;
   letter-spacing: 0.06em;
-  color: var(--contorno-variante);
+  color: var(--contorno);
 }
 
 .contador-dia--hoy {
