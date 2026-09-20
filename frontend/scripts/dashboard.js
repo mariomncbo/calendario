@@ -198,6 +198,13 @@ window.onload = function () {
 
   // Cargar la semana actual al entrar en la página
   cargar_semana(0, rejilla_semana, titulo_semana);
+
+  // Registrar el service worker para permitir instalar la app como PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('../service-worker.js').catch(function (error) {
+      console.error('No se pudo registrar el service worker:', error);
+    });
+  }
 };
 
 /**

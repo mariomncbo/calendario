@@ -1,0 +1,25 @@
+{
+  "name": "Calendario",
+  "short_name": "Calendario",
+  "description": "Calendario semanal sincronizado con Google Calendar y Google Tasks.",
+  "start_url": "./dashboard.php",
+  "scope": "./",
+  "display": "standalone",
+  "lang": "es",
+  "background_color": "#faf9f5",
+  "theme_color": "#202420",
+  "icons": [
+    {
+      "src": "src/img/icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "src/img/icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
