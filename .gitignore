@@ -10,7 +10,7 @@ vendor/
 # Local-only working notes
 opencode.json
 AGENTS.MD
-.agents
+.opencode/
 
 # Temporary files
 temp/
