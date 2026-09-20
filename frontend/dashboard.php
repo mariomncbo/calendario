@@ -150,6 +150,17 @@ if (!isset($_SESSION['usuario'])) {
                             </button>
                         </div>
                     </div>
+                    <!-- Selector de hora de la notificación: se muestra al activar el interruptor -->
+                    <div class="selector-hora-notificacion" id="selector_hora_notificacion" hidden>
+                        <span class="material-symbols-outlined accion-icono">schedule</span>
+                        <div class="selector-hora-campos">
+                            <label class="etiqueta-hora" for="entrada_hora_notificacion">Elegir hora del día</label>
+                            <div class="selector-hora-controles">
+                                <input type="time" class="entrada-hora" id="entrada_hora_notificacion" value="08:00" aria-label="Hora de la notificación diaria">
+                                <button class="boton-aceptar" id="boton_aceptar_hora" type="button">&check;</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

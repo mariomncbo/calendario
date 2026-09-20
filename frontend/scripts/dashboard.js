@@ -32,6 +32,9 @@ window.onload = function () {
   // --- Controles del modal de ajustes ---
   const interruptor_ocultar_tareas = document.getElementById('interruptor_ocultar_tareas');
   const interruptor_notificacion_diaria = document.getElementById('interruptor_notificacion_diaria');
+  const selector_hora_notificacion = document.getElementById('selector_hora_notificacion');
+  const entrada_hora_notificacion = document.getElementById('entrada_hora_notificacion');
+  const boton_aceptar_hora = document.getElementById('boton_aceptar_hora');
   const boton_borrar_cuenta = document.getElementById('boton_borrar_cuenta');
 
   // --- Preferencia de tema (claro / oscuro / automático) ---
@@ -135,9 +138,50 @@ window.onload = function () {
   });
 
   // --- Notificación diaria (solo visual; la lógica se añadirá más adelante) ---
+  // Al activarla se muestra el selector de hora; al aceptar se guarda en localStorage.
+  const CLAVE_HORA_NOTIFICACION = 'hora_notificacion';
+  const CLAVE_NOTIFICACION_DIARIA = 'notificacion_diaria';
+  const HORA_DEFECTO_NOTIFICACION = '08:00';
+
+  // Restaurar la hora guardada (08:00 por defecto)
+  entrada_hora_notificacion.value =
+    localStorage.getItem(CLAVE_HORA_NOTIFICACION) || HORA_DEFECTO_NOTIFICACION;
+
+  /**
+   * Aplica el estado del interruptor de notificación y muestra u oculta
+   * el selector de hora justo debajo.
+   *
+   * @param {boolean} activo  true si la notificación diaria está activa.
+   */
+  function aplicar_notificacion_diaria(activo) {
+    interruptor_notificacion_diaria.setAttribute('aria-checked', activo ? 'true' : 'false');
+    selector_hora_notificacion.hidden = !activo;
+  }
+
+  // Restaurar el estado del interruptor guardado (por defecto desactivado)
+  aplicar_notificacion_diaria(localStorage.getItem(CLAVE_NOTIFICACION_DIARIA) === 'true');
+
   interruptor_notificacion_diaria.addEventListener('click', function () {
     const activo = interruptor_notificacion_diaria.getAttribute('aria-checked') === 'true';
-    interruptor_notificacion_diaria.setAttribute('aria-checked', activo ? 'false' : 'true');
+    localStorage.setItem(CLAVE_NOTIFICACION_DIARIA, activo ? 'false' : 'true');
+    aplicar_notificacion_diaria(!activo);
+  });
+
+  // Guardar la hora elegida al pulsar Aceptar, con confirmación visual breve
+  boton_aceptar_hora.addEventListener('click', function () {
+    const hora = entrada_hora_notificacion.value;
+    if (!hora) {
+      console.error('La hora de notificación está vacía.');
+      return;
+    }
+
+    localStorage.setItem(CLAVE_HORA_NOTIFICACION, hora);
+    boton_aceptar_hora.disabled = true;
+    boton_aceptar_hora.textContent = 'Hecho';
+    setTimeout(function () {
+      boton_aceptar_hora.disabled = false;
+      boton_aceptar_hora.textContent = '✓';
+    }, 1200);
   });
 
   // --- Borrar cuenta: elimina los datos del usuario de la base de datos ---
