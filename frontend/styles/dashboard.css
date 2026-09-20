@@ -879,6 +879,166 @@ a {
   pointer-events: none;
 }
 
+/* Estado activo de las acciones que funcionan como interruptor */
+.fila-interruptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-md);
+  padding: var(--espacio-sm) var(--espacio-md);
+  transition-property: background-color;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fila-interruptor:hover {
+  background-color: var(--superficie-media);
+}
+
+.fila-interruptor-texto {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--texto-principal);
+}
+
+.fila-interruptor-controles {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-xs);
+}
+
+/* Interruptor on-off */
+.interruptor {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.interruptor-pista {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: var(--radio-completo);
+  background-color: var(--contorno-variante);
+  transition-property: background-color;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interruptor-pista::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radio-completo);
+  background-color: var(--superficie-mas-baja);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+  transition-property: transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interruptor[aria-checked='true'] .interruptor-pista {
+  background-color: var(--secundario);
+}
+
+.interruptor[aria-checked='true'] .interruptor-pista::after {
+  transform: translateX(16px);
+}
+
+/* Acción de peligro: destacada con el color de error */
+.accion--peligro {
+  color: var(--error);
+}
+
+.accion--peligro .accion-icono {
+  color: var(--error);
+}
+
+.accion--peligro:hover {
+  background-color: var(--contenedor-error);
+  color: var(--sobre-contenedor-error);
+}
+
+.accion--peligro:hover .accion-icono {
+  color: var(--sobre-contenedor-error);
+}
+
+/* Contenedor del botón de ayuda (?) y su tooltip */
+.contenedor-ayuda {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.boton-ayuda {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--radio-completo);
+  background-color: var(--superficie-media);
+  color: var(--contorno);
+  cursor: pointer;
+  transition-property: background-color, color;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.boton-ayuda:hover {
+  background-color: var(--superficie-alta);
+  color: var(--texto-principal);
+}
+
+.boton-ayuda .material-symbols-outlined {
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* Tooltip: aparece al pasar el ratón por encima o al enfocar con teclado */
+.tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 10;
+  width: 220px;
+  padding: var(--espacio-sm) var(--espacio-md);
+  border-radius: var(--radio-lg);
+  background-color: var(--primario);
+  color: var(--sobre-primario);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition-property: opacity, visibility;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.contenedor-ayuda:hover .tooltip,
+.contenedor-ayuda:focus-within .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Ocultar las secciones de tareas del calendario */
+.rejilla-semana--sin-tareas .seccion-tareas {
+  display: none;
+}
+
 /* ------------------------------------------------------------
    Diseño responsive
    ------------------------------------------------------------ */

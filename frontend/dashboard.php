@@ -123,6 +123,46 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
             <div class="seccion-ajustes">
+                <span class="etiqueta-seccion">Notificaciones</span>
+                <div class="lista-acciones">
+                    <div class="fila-interruptor">
+                        <div class="fila-interruptor-texto">
+                            <span class="material-symbols-outlined accion-icono">notifications</span>
+                            Notificación diaria
+                            <div class="contenedor-ayuda">
+                                <button class="boton-ayuda" id="boton_ayuda_notificacion" type="button" aria-label="¿Qué envía la notificación diaria?" aria-describedby="tooltip_notificacion">
+                                    <span class="material-symbols-outlined accion-icono">help</span>
+                                </button>
+                                <div class="tooltip" id="tooltip_notificacion" role="tooltip">
+                                    Envía cada día un aviso con los eventos y tareas de ese día, ordenados por hora.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila-interruptor-controles">
+                            <button class="interruptor" id="interruptor_notificacion_diaria" role="switch" aria-checked="false" aria-label="Notificación diaria">
+                                <span class="interruptor-pista" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="seccion-ajustes">
+                <span class="etiqueta-seccion">Preferencias</span>
+                <div class="lista-acciones">
+                    <div class="fila-interruptor">
+                        <div class="fila-interruptor-texto">
+                            <span class="material-symbols-outlined accion-icono">visibility_off</span>
+                            Ocultar tareas
+                        </div>
+                        <button class="interruptor" id="interruptor_ocultar_tareas" role="switch" aria-checked="false" aria-label="Ocultar tareas">
+                            <span class="interruptor-pista" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="seccion-ajustes">
                 <span class="etiqueta-seccion">Cuenta</span>
                 <div class="lista-acciones">
                     <a class="accion" href="index.php">
@@ -137,6 +177,10 @@ if (!isset($_SESSION['usuario'])) {
                         <span class="material-symbols-outlined accion-icono">logout</span>
                         Cerrar sesión
                     </a>
+                    <button class="accion accion--peligro" id="boton_borrar_cuenta">
+                        <span class="material-symbols-outlined accion-icono">delete_forever</span>
+                        Borrar cuenta
+                    </button>
                 </div>
             </div>
         </div>

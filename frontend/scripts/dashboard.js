@@ -26,6 +26,11 @@ window.onload = function () {
   const enlace_semana_actual = document.getElementById('enlace_semana_actual');
   const enlace_siguiente_semana = document.getElementById('enlace_siguiente_semana');
 
+  // --- Controles del modal de ajustes ---
+  const interruptor_ocultar_tareas = document.getElementById('interruptor_ocultar_tareas');
+  const interruptor_notificacion_diaria = document.getElementById('interruptor_notificacion_diaria');
+  const boton_borrar_cuenta = document.getElementById('boton_borrar_cuenta');
+
   // --- Preferencia de tema (claro / oscuro / automático) ---
   const CLAVE_TEMA = 'tema';
   const opciones_modo = document.querySelectorAll('.opcion-modo');
@@ -106,6 +111,59 @@ window.onload = function () {
     if (evento.key === 'Escape' && fondo_modal.classList.contains('fondo-modal--visible')) {
       fondo_modal.classList.remove('fondo-modal--visible');
     }
+  });
+
+  // --- Preferencia "Ocultar tareas" ---
+  // Guarda la preferencia en localStorage y oculta la sección de tareas del
+  // calendario con CSS, sin volver a pedir datos al backend.
+  const CLAVE_OCULTAR_TAREAS = 'ocultar_tareas';
+
+  function aplicar_ocultar_tareas(activo) {
+    rejilla_semana.classList.toggle('rejilla-semana--sin-tareas', activo);
+    interruptor_ocultar_tareas.setAttribute('aria-checked', activo ? 'true' : 'false');
+  }
+
+  aplicar_ocultar_tareas(localStorage.getItem(CLAVE_OCULTAR_TAREAS) === 'true');
+
+  interruptor_ocultar_tareas.addEventListener('click', function () {
+    const activo = localStorage.getItem(CLAVE_OCULTAR_TAREAS) !== 'true';
+    localStorage.setItem(CLAVE_OCULTAR_TAREAS, activo ? 'true' : 'false');
+    aplicar_ocultar_tareas(activo);
+  });
+
+  // --- Notificación diaria (solo visual; la lógica se añadirá más adelante) ---
+  interruptor_notificacion_diaria.addEventListener('click', function () {
+    const activo = interruptor_notificacion_diaria.getAttribute('aria-checked') === 'true';
+    interruptor_notificacion_diaria.setAttribute('aria-checked', activo ? 'false' : 'true');
+  });
+
+  // --- Borrar cuenta: elimina los datos del usuario de la base de datos ---
+  boton_borrar_cuenta.addEventListener('click', function () {
+    const confirmacion = window.confirm(
+      '¿Seguro que quieres borrar tu cuenta? Se eliminarán todos tus datos de la aplicación.'
+    );
+    if (!confirmacion) {
+      return;
+    }
+
+    fetch('../backend/delete-account.php', { method: 'POST' })
+      .then((respuesta) => {
+        if (!respuesta.ok) {
+          throw new Error('El servidor respondió con el estado ' + respuesta.status);
+        }
+        return respuesta.json();
+      })
+      .then((datos) => {
+        if (!datos.success) {
+          throw new Error('La API devolvió un error: ' + JSON.stringify(datos.errores));
+        }
+        // Volver al login público una vez borrados los datos
+        window.location.href = 'index.php';
+      })
+      .catch((error) => {
+        // Los errores solo se muestran por consola
+        console.error('No se pudo borrar la cuenta:', error);
+      });
   });
 
   // Cambiar de semana al pulsar los enlaces de la nav. Solo se alterna entre
