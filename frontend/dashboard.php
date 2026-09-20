@@ -169,10 +169,10 @@ if (!isset($_SESSION['usuario'])) {
                         <span class="material-symbols-outlined accion-icono">home</span>
                         Volver al inicio
                     </a>
-                    <button class="accion">
+                    <a class="accion" href="../backend/cambiar_cuenta.php">
                         <span class="material-symbols-outlined accion-icono">loop</span>
                         Cambiar de cuenta
-                    </button>
+                    </a>
                     <a class="accion" href="../backend/logout.php">
                         <span class="material-symbols-outlined accion-icono">logout</span>
                         Cerrar sesión
