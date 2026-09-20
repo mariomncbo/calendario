@@ -422,6 +422,8 @@ a {
   transition-property: all;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Al anclar el scroll al día de hoy, deja espacio para la cabecera fija */
+  scroll-margin-top: calc(4rem + var(--espacio-md));
 }
 
 .tarjeta-dia:hover {
@@ -1046,6 +1048,12 @@ a {
    enormes apilados; el llenado de pantalla completa es solo en escritorio. */
 @media (max-width: 767px) {
   .linea-tiempo--vacia {
+    display: none;
+  }
+
+  /* En móvil la marca (nombre + estado de sincronización) no se muestra:
+     el header solo conserve el nav y el botón de ajustes. */
+  .marca {
     display: none;
   }
 }

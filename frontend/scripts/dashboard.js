@@ -16,6 +16,9 @@ const ALTURA_POR_HORA = 40;
 // La franja horaria siempre termina a las 24:00
 const HORA_FIN_RANGO = 24;
 
+// En la primera carga del móvil el scroll se sitúa en el día de hoy
+let desplazarse_a_hoy = true;
+
 window.onload = function () {
   const rejilla_semana = document.getElementById('rejilla_semana');
   const titulo_semana = document.getElementById('titulo_semana');
@@ -168,16 +171,29 @@ window.onload = function () {
 
   // Cambiar de semana al pulsar los enlaces de la nav. Solo se alterna entre
   // la semana actual (0) y la siguiente (1) relativa a hoy, sin navegación continua.
+  let desplazamiento_actual = 0;
+
   enlace_semana_actual.addEventListener('click', function (evento) {
     evento.preventDefault();
+    desplazamiento_actual = 0;
+    desplazarse_a_hoy = false;
     marcar_enlace_activo(enlace_semana_actual);
-    cargar_semana(0, rejilla_semana, titulo_semana);
+    cargar_semana(desplazamiento_actual, rejilla_semana, titulo_semana);
   });
 
   enlace_siguiente_semana.addEventListener('click', function (evento) {
     evento.preventDefault();
+    desplazamiento_actual = 1;
+    desplazarse_a_hoy = false;
     marcar_enlace_activo(enlace_siguiente_semana);
-    cargar_semana(1, rejilla_semana, titulo_semana);
+    cargar_semana(desplazamiento_actual, rejilla_semana, titulo_semana);
+  });
+
+  // Al cruzar el breakpoint entre móvil y escritorio se reconstruye la rejilla:
+  // en móvil cada día usa su propia altura y en escritorio vuelve a la línea de
+  // tiempo compartida (rango alineado para los 7 días).
+  window.matchMedia('(max-width: 767px)').addEventListener('change', function () {
+    cargar_semana(desplazamiento_actual, rejilla_semana, titulo_semana);
   });
 
   // Cargar la semana actual al entrar en la página
@@ -268,6 +284,10 @@ function renderizar_semana(datos, rejilla, titulo) {
   const altura_px = (rango_min_totales / 60) * ALTURA_POR_HORA;
   rejilla.style.setProperty('--altura-linea', altura_px + 'px');
 
+  // En móvil cada día usa su propio rango y altura para que la tarjeta crezca
+  // solo lo que ocupan sus eventos (en lugar del rango completo de la semana).
+  const es_movil = window.matchMedia('(max-width: 767px)').matches;
+
   // Generar una tarjeta por cada día de lunes a domingo
   for (let i = 0; i < 7; i++) {
     const fecha = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + i);
@@ -275,9 +295,34 @@ function renderizar_semana(datos, rejilla, titulo) {
     const eventos = datos.eventos.filter((evento) => evento.dia === dia_iso);
     const tareas = datos.tareas.filter((tarea) => tarea.dia === dia_iso);
 
+    // Rango y altura propios del día (solo en móvil); en escritorio se usa el
+    // rango global de la semana.
+    let rango_inicio_dia = rango_inicio_min;
+    let rango_min_dia = rango_min_totales;
+    let altura_linea_dia = null;
+
+    if (es_movil) {
+      const eventos_con_hora_dia = eventos.filter((evento) => !evento.todo_el_dia);
+      const rango_dia = calcular_rango_dia(eventos_con_hora_dia);
+      if (rango_dia) {
+        rango_inicio_dia = rango_dia.inicio;
+        rango_min_dia = rango_dia.total;
+        altura_linea_dia = (rango_dia.total / 60) * ALTURA_POR_HORA;
+      }
+    }
+
     rejilla.appendChild(
-      crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, rango_inicio_min, rango_min_totales)
+      crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, rango_inicio_dia, rango_min_dia, altura_linea_dia)
     );
+  }
+
+  // En la primera carga del móvil el scroll va directo al día de hoy
+  if (desplazarse_a_hoy && es_movil) {
+    const tarjeta_hoy = document.getElementById('hoy');
+    if (tarjeta_hoy) {
+      tarjeta_hoy.scrollIntoView({ block: 'start' });
+    }
+    desplazarse_a_hoy = false;
   }
 }
 
@@ -292,9 +337,10 @@ function renderizar_semana(datos, rejilla, titulo) {
  * @param {Array} tareas               Tareas de Google Tasks con vencimiento ese día.
  * @param {number} rango_inicio_min    Inicio del rango horario en minutos.
  * @param {number} rango_min_totales   Duración del rango en minutos.
+ * @param {number|null} altura_linea_dia  Altura de la línea (px) para móvil, o null en escritorio.
  * @return {HTMLElement}               Tarjeta de día lista para insertar.
  */
-function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, rango_inicio_min, rango_min_totales) {
+function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, rango_inicio_min, rango_min_totales, altura_linea_dia) {
   const tarjeta = document.createElement('article');
   tarjeta.className = 'tarjeta-dia';
 
@@ -303,6 +349,7 @@ function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, rango_inici
 
   if (es_hoy) {
     tarjeta.classList.add('tarjeta-dia--hoy');
+    tarjeta.id = 'hoy';
   }
   if (es_fin_de_semana) {
     tarjeta.classList.add('tarjeta-dia--fin-de-semana');
@@ -370,7 +417,7 @@ function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, rango_inici
   // Se pinta siempre (aunque el día esté vacío) para que el calendario
   // conserve su tamaño mínimo de pantalla completa.
   tarjeta.appendChild(
-    crear_linea_tiempo(eventos_con_hora_dia, rango_inicio_min, rango_min_totales)
+    crear_linea_tiempo(eventos_con_hora_dia, rango_inicio_min, rango_min_totales, altura_linea_dia)
   );
 
   // --- Sección de tareas de Google Tasks (si el día tiene) ---
@@ -462,15 +509,21 @@ function crear_franja_todo_dia(eventos) {
  * @param {Array} eventos             Eventos con hora del día.
  * @param {number} rango_inicio_min   Inicio del rango horario en minutos.
  * @param {number} rango_min_totales  Duración del rango en minutos.
+ * @param {number|null} altura_linea_dia  Altura propia del día (px) en móvil, o null en escritorio.
  * @return {HTMLElement}              Línea de tiempo del día.
  */
-function crear_linea_tiempo(eventos, rango_inicio_min, rango_min_totales) {
+function crear_linea_tiempo(eventos, rango_inicio_min, rango_min_totales, altura_linea_dia) {
   const linea = document.createElement('div');
   linea.className = 'linea-tiempo';
 
   // Marcar la línea como vacía para tratarla distinto en pantallas pequeñas
   if (eventos.length === 0) {
     linea.classList.add('linea-tiempo--vacia');
+  }
+
+  // En móvil la línea mide lo que ocupen los eventos de ese día
+  if (altura_linea_dia !== null) {
+    linea.style.setProperty('--altura-linea', altura_linea_dia + 'px');
   }
 
   // --- Bloques de evento proporcionales a la duración ---
@@ -584,6 +637,32 @@ function calcular_franjas(eventos, rango_inicio_min, rango_min_totales) {
   });
 
   return resultado;
+}
+
+/**
+ * Calcula el rango horario de un día a partir de sus eventos: desde la hora
+ * del evento más temprano (redondeada hacia abajo) hasta la del más tardío
+ * (redondeada hacia arriba), con un mínimo de 1 hora.
+ *
+ * @param {Array} eventos  Eventos con hora del día (puede estar vacío).
+ * @return {Object|null}   { inicio, total } en minutos, o null sin eventos.
+ */
+function calcular_rango_dia(eventos) {
+  if (eventos.length === 0) {
+    return null;
+  }
+
+  let inicio_min = Math.min.apply(null, eventos.map((evento) => horas_a_minutos(evento.hora_inicio)));
+  let fin_min = Math.max.apply(null, eventos.map((evento) => horas_a_minutos(evento.hora_fin)));
+
+  inicio_min = Math.floor(inicio_min / 60) * 60;
+  fin_min = Math.min(Math.ceil(fin_min / 60) * 60, HORA_FIN_RANGO * 60);
+
+  if (fin_min <= inicio_min) {
+    fin_min = inicio_min + 60;
+  }
+
+  return { inicio: inicio_min, total: fin_min - inicio_min };
 }
 
 /**
