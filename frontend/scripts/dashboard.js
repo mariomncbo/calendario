@@ -23,6 +23,8 @@ window.onload = function () {
   const boton_cerrar = document.getElementById('boton_cerrar');
   const fondo_modal = document.getElementById('fondo_modal');
   const ventana_modal = document.getElementById('ventana_modal');
+  const enlace_semana_actual = document.getElementById('enlace_semana_actual');
+  const enlace_siguiente_semana = document.getElementById('enlace_siguiente_semana');
 
   // --- Preferencia de tema (claro / oscuro / automático) ---
   const CLAVE_TEMA = 'tema';
@@ -106,8 +108,54 @@ window.onload = function () {
     }
   });
 
-  // Pedir los datos reales al backend
-  fetch(URL_DATOS)
+  // Cambiar de semana al pulsar los enlaces de la nav. Solo se alterna entre
+  // la semana actual (0) y la siguiente (1) relativa a hoy, sin navegación continua.
+  enlace_semana_actual.addEventListener('click', function (evento) {
+    evento.preventDefault();
+    marcar_enlace_activo(enlace_semana_actual);
+    cargar_semana(0, rejilla_semana, titulo_semana);
+  });
+
+  enlace_siguiente_semana.addEventListener('click', function (evento) {
+    evento.preventDefault();
+    marcar_enlace_activo(enlace_siguiente_semana);
+    cargar_semana(1, rejilla_semana, titulo_semana);
+  });
+
+  // Cargar la semana actual al entrar en la página
+  cargar_semana(0, rejilla_semana, titulo_semana);
+};
+
+/**
+ * Marca un enlace de la nav como activo y limpia el otro.
+ *
+ * @param {HTMLElement} enlace_activo  Enlace de la semana seleccionada.
+ */
+function marcar_enlace_activo(enlace_activo) {
+  const enlaces = document.querySelectorAll('.enlace-nav');
+  enlaces.forEach((enlace) => {
+    const es_activo = enlace === enlace_activo;
+    enlace.classList.toggle('enlace-nav--activo', es_activo);
+    if (es_activo) {
+      enlace.setAttribute('aria-current', 'page');
+    } else {
+      enlace.removeAttribute('aria-current');
+    }
+  });
+}
+
+/**
+ * Pide al backend los datos de una semana (desplazada respecto a la actual)
+ * y reconstruye la rejilla semanal con la respuesta.
+ *
+ * @param {number} desplazamiento  Semanas a añadir a la semana actual (0 o 1).
+ * @param {HTMLElement} rejilla    Contenedor de la rejilla semanal.
+ * @param {HTMLElement} titulo     Elemento con el título de la semana.
+ */
+function cargar_semana(desplazamiento, rejilla, titulo) {
+  rejilla.innerHTML = '';
+
+  fetch(URL_DATOS + '?desplazamiento=' + desplazamiento)
     .then((respuesta) => {
       if (!respuesta.ok) {
         throw new Error('El servidor respondió con el estado ' + respuesta.status);
@@ -119,13 +167,13 @@ window.onload = function () {
         throw new Error('La API devolvió un error: ' + JSON.stringify(datos.errores));
       }
 
-      renderizar_semana(datos, rejilla_semana, titulo_semana);
+      renderizar_semana(datos, rejilla, titulo);
     })
     .catch((error) => {
       // Los errores solo se muestran por consola
       console.error('No se pudieron cargar los datos de la semana:', error);
     });
-};
+}
 
 /**
  * Construye la rejilla de 7 días, el título del rango y la línea de

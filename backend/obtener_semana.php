@@ -24,6 +24,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit();
 }
 
+// Desplazamiento en semanas respecto a la actual (0 = esta semana, 1 = siguiente)
+$desplazamiento = isset($_GET['desplazamiento']) ? $_GET['desplazamiento'] : 0;
+if (!is_numeric($desplazamiento) || (int) $desplazamiento < 0) {
+    http_response_code(400);
+    $respuesta['errores'][] = 'El parámetro desplazamiento debe ser un número entero no negativo.';
+    echo json_encode($respuesta);
+    exit();
+}
+$desplazamiento = (int) $desplazamiento;
+
 // Debe existir una sesión activa con los tokens de Google
 if (!isset($_SESSION['usuario']) || !isset($_SESSION['google_access_token'])) {
     http_response_code(401);
@@ -57,10 +67,14 @@ try {
         );
     }
 
-    // --- Calcular la semana actual (lunes a domingo) ---
+    // --- Calcular la semana solicitada (lunes a domingo) ---
+    // Por defecto la actual; con desplazamiento se suma esa cantidad de semanas.
     $ahora = new DateTime('now');
     $desplazamiento_lunes = (int) $ahora->format('N') - 1; // N: 1=lunes ... 7=domingo
-    $inicio_semana = (clone $ahora)->modify("-$desplazamiento_lunes days")->setTime(0, 0, 0);
+    $inicio_semana = (clone $ahora)
+        ->modify("-$desplazamiento_lunes days")
+        ->modify('+' . (7 * $desplazamiento) . ' days')
+        ->setTime(0, 0, 0);
     $fin_semana = (clone $inicio_semana)->modify('+6 days')->setTime(23, 59, 59);
 
     $semana = [

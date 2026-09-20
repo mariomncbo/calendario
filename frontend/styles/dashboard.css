@@ -298,7 +298,7 @@ a {
 }
 
 .navegacion {
-  display: none;
+  display: flex;
   align-items: center;
   gap: var(--espacio-md);
 }
@@ -887,12 +887,6 @@ a {
 
   .rejilla-semana {
     grid-template-columns: repeat(7, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .navegacion {
-    display: flex;
   }
 }
 

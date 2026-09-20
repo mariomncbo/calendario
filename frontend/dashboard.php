@@ -73,8 +73,8 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
             </div>
             <nav class="navegacion">
-                <a class="enlace-nav enlace-nav--activo" href="#" aria-current="page">Semana Actual</a>
-                <a class="enlace-nav" href="#">Siguiente Semana</a>
+                <a class="enlace-nav enlace-nav--activo" href="#" id="enlace_semana_actual" aria-current="page">Semana Actual</a>
+                <a class="enlace-nav" href="#" id="enlace_siguiente_semana">Siguiente Semana</a>
             </nav>
             <div class="estado-sincronizacion">
                 <button class="boton-ajustes" id="boton_ajustes" aria-label="Abrir ajustes">
