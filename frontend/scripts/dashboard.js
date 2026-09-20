@@ -198,10 +198,9 @@ function renderizar_semana(datos, rejilla, titulo) {
   // Rango horario de la semana: empieza en la hora del evento más
   // temprano (redondeada hacia abajo) y termina siempre a las 24:00
   const eventos_con_hora = datos.eventos.filter((evento) => !evento.todo_el_dia);
-  const hay_timeline = eventos_con_hora.length > 0;
 
   let rango_inicio_min = 0;
-  if (hay_timeline) {
+  if (eventos_con_hora.length > 0) {
     const horarios = eventos_con_hora.map((evento) => horas_a_minutos(evento.hora_inicio));
     rango_inicio_min = Math.floor(Math.min.apply(null, horarios) / 60) * 60;
   }
@@ -219,7 +218,7 @@ function renderizar_semana(datos, rejilla, titulo) {
     const tareas = datos.tareas.filter((tarea) => tarea.dia === dia_iso);
 
     rejilla.appendChild(
-      crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, hay_timeline, rango_inicio_min, rango_min_totales)
+      crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, rango_inicio_min, rango_min_totales)
     );
   }
 }
@@ -233,12 +232,11 @@ function renderizar_semana(datos, rejilla, titulo) {
  * @param {string} hoy_iso             Fecha de hoy en formato Y-m-d.
  * @param {Array} eventos              Eventos de Google Calendar del día.
  * @param {Array} tareas               Tareas de Google Tasks con vencimiento ese día.
- * @param {boolean} hay_timeline       Si la semana tiene eventos con hora.
  * @param {number} rango_inicio_min    Inicio del rango horario en minutos.
  * @param {number} rango_min_totales   Duración del rango en minutos.
  * @return {HTMLElement}               Tarjeta de día lista para insertar.
  */
-function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, hay_timeline, rango_inicio_min, rango_min_totales) {
+function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, rango_inicio_min, rango_min_totales) {
   const tarjeta = document.createElement('article');
   tarjeta.className = 'tarjeta-dia';
 
@@ -311,11 +309,11 @@ function crear_tarjeta_dia(fecha, dia_iso, hoy_iso, eventos, tareas, hay_timelin
   }
 
   // --- Línea de tiempo con los eventos posicionados ---
-  if (hay_timeline) {
-    tarjeta.appendChild(
-      crear_linea_tiempo(eventos_con_hora_dia, rango_inicio_min, rango_min_totales)
-    );
-  }
+  // Se pinta siempre (aunque el día esté vacío) para que el calendario
+  // conserve su tamaño mínimo de pantalla completa.
+  tarjeta.appendChild(
+    crear_linea_tiempo(eventos_con_hora_dia, rango_inicio_min, rango_min_totales)
+  );
 
   // --- Sección de tareas de Google Tasks (si el día tiene) ---
   if (tareas.length > 0) {
@@ -411,6 +409,11 @@ function crear_franja_todo_dia(eventos) {
 function crear_linea_tiempo(eventos, rango_inicio_min, rango_min_totales) {
   const linea = document.createElement('div');
   linea.className = 'linea-tiempo';
+
+  // Marcar la línea como vacía para tratarla distinto en pantallas pequeñas
+  if (eventos.length === 0) {
+    linea.classList.add('linea-tiempo--vacia');
+  }
 
   // --- Bloques de evento proporcionales a la duración ---
   calcular_franjas(eventos, rango_inicio_min, rango_min_totales).forEach((franja) => {

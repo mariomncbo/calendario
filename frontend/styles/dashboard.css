@@ -356,6 +356,8 @@ a {
    Contenido principal
    ------------------------------------------------------------ */
 .contenido {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   flex: 1;
   background-color: var(--superficie-brillante);
@@ -402,6 +404,7 @@ a {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--canal-calendario);
+  flex: 1;
   width: 100%;
   padding: 0 var(--margen) var(--margen);
 }
@@ -879,6 +882,14 @@ a {
 /* ------------------------------------------------------------
    Diseño responsive
    ------------------------------------------------------------ */
+/* En móvil las líneas de tiempo vacías se ocultan para no generar bloques
+   enormes apilados; el llenado de pantalla completa es solo en escritorio. */
+@media (max-width: 767px) {
+  .linea-tiempo--vacia {
+    display: none;
+  }
+}
+
 @media (min-width: 768px) {
   .fila-titulo {
     flex-direction: row;
@@ -887,6 +898,14 @@ a {
 
   .rejilla-semana {
     grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+  }
+
+  /* La línea de tiempo llena la tarjeta y se comprime para caber siempre
+     en pantalla (en vez de fijar 40px por hora). */
+  .linea-tiempo {
+    flex: 1;
+    min-height: 0;
   }
 }
 
