@@ -67,6 +67,37 @@ if (!isset($_SESSION['usuario'])) {
             }
         })();
     </script>
+
+    <?php
+    // Cargar las variables de entorno para leer el App ID público de OneSignal.
+    // Este App ID no es un secreto: el navegador lo necesita para suscribirse.
+    require_once __DIR__ . '/../backend/google-login-config.php';
+    $onesignal_app_id = $_ENV['ONESIGNAL_APP_ID'] ?? '';
+    $onesignal_google_id = $_SESSION['google_id'] ?? '';
+    ?>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        // Inicializar OneSignal con el App ID público y fijar la identidad del
+        // usuario para poder dirigirle las notificaciones individualmente.
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function (OneSignal) {
+            await OneSignal.init({
+                appId: <?php echo json_encode($onesignal_app_id); ?>,
+                // El worker de OneSignal vive en subcarpeta para no interferir
+                // con el service worker de la PWA (frontend/service-worker.js)
+                serviceWorkerPath: 'onesignal/OneSignalSDKWorker.js',
+                serviceWorkerParam: { scope: '/onesignal/' },
+            });
+            <?php if ($onesignal_google_id !== ''): ?>
+            try {
+                OneSignal.User.addAlias({ external_id: <?php echo json_encode($onesignal_google_id); ?> });
+            } catch (error) {
+                // Los errores solo se muestran por consola
+                console.error('No se pudo fijar la identidad en OneSignal:', error);
+            }
+            <?php endif; ?>
+        });
+    </script>
 </head>
 <body>
     <header class="encabezado">
@@ -104,7 +135,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="barra-pie"></div>
     </footer>
 
-    <!-- Ventana de ajustes (contenido maquetado; sin funcionalidad todavía) -->
+    <!-- Ventana de ajustes: tema, notificaciones, preferencias y cuenta -->
     <div class="fondo-modal" id="fondo_modal">
         <div class="ventana-modal" id="ventana_modal" role="dialog" aria-modal="true" aria-label="Ajustes">
             <div class="cabecera-modal">

@@ -192,12 +192,27 @@ try {
         }
     }
 
+    // Preferencias de notificación diaria del usuario (para inicializar la UI)
+    $preferencias = ['daily_notifications_active' => 0, 'hora_notificacion' => null];
+    $stmt = $pdo->prepare(
+        'SELECT daily_notifications_active, hora_notificacion FROM users WHERE google_id = :google_id'
+    );
+    $stmt->execute([':google_id' => $_SESSION['google_id']]);
+    $fila_preferencias = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($fila_preferencias) {
+        $preferencias = [
+            'daily_notifications_active' => (int) $fila_preferencias['daily_notifications_active'],
+            'hora_notificacion'          => $fila_preferencias['hora_notificacion'],
+        ];
+    }
+
     $respuesta = [
         'success' => true,
         'usuario' => $_SESSION['usuario'],
         'semana'  => $semana,
         'eventos' => $eventos,
         'tareas'  => $tareas,
+        'preferencias' => $preferencias,
     ];
 } catch (PDOException $e) {
     // Los errores solo se muestran por consola
