@@ -147,6 +147,9 @@ window.onload = function () {
   entrada_hora_notificacion.value =
     localStorage.getItem(CLAVE_HORA_NOTIFICACION) || HORA_DEFECTO_NOTIFICACION;
 
+  // La hora guardada ya está aceptada: se muestra el check y no se puede pulsar
+  boton_aceptar_hora.disabled = true;
+
   /**
    * Aplica el estado del interruptor de notificación y muestra u oculta
    * el selector de hora justo debajo.
@@ -167,7 +170,13 @@ window.onload = function () {
     aplicar_notificacion_diaria(!activo);
   });
 
-  // Guardar la hora elegida al pulsar Aceptar, con confirmación visual breve
+  // Al modificar la hora, se habilita el botón para poder aceptarla
+  entrada_hora_notificacion.addEventListener('input', function () {
+    boton_aceptar_hora.disabled = false;
+    boton_aceptar_hora.textContent = 'Aceptar';
+  });
+
+  // Guardar la hora elegida al pulsar Aceptar y mostrar el check sin poder pulsar
   boton_aceptar_hora.addEventListener('click', function () {
     const hora = entrada_hora_notificacion.value;
     if (!hora) {
@@ -177,11 +186,7 @@ window.onload = function () {
 
     localStorage.setItem(CLAVE_HORA_NOTIFICACION, hora);
     boton_aceptar_hora.disabled = true;
-    boton_aceptar_hora.textContent = 'Hecho';
-    setTimeout(function () {
-      boton_aceptar_hora.disabled = false;
-      boton_aceptar_hora.textContent = '✓';
-    }, 1200);
+    boton_aceptar_hora.textContent = '✓';
   });
 
   // --- Borrar cuenta: elimina los datos del usuario de la base de datos ---

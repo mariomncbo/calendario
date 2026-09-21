@@ -157,7 +157,7 @@ if (!isset($_SESSION['usuario'])) {
                             <label class="etiqueta-hora" for="entrada_hora_notificacion">Elegir hora del día</label>
                             <div class="selector-hora-controles">
                                 <input type="time" class="entrada-hora" id="entrada_hora_notificacion" value="08:00" aria-label="Hora de la notificación diaria">
-                                <button class="boton-aceptar" id="boton_aceptar_hora" type="button">&check;</button>
+                                <button class="boton-aceptar" id="boton_aceptar_hora" type="button" disabled>&check;</button>
                             </div>
                         </div>
                     </div>
