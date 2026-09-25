@@ -9,7 +9,7 @@ $dotenv->load();
 $clientID = $_ENV['GOOGLE_CLIENT_ID'];
 $clientSecret = $_ENV['CLIENT_SECRET'];
 
-$redirectUri = "http://localhost:8888/calendario/frontend/dashboard.php"; //URL donde redirecciona si es correcto el login.
+$redirectUri = "http://localhost:8888/calendario/dashboard.php"; //URL donde redirecciona si es correcto el login.
 
  // create Client Request to access Google API
   $client = new Google_Client();

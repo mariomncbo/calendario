@@ -2,7 +2,7 @@
 session_start();
 
 // Intercambiar el código de Google por tokens y perfil, si venimos del login
-require_once __DIR__ . '/../backend/google-login-autentificacion.php';
+require_once __DIR__ . '/backend/google-login-autentificacion.php';
 
 // Persistir los tokens y los datos del usuario en la sesión
 if (isset($google_access_token)) {
@@ -12,7 +12,7 @@ if (isset($google_access_token)) {
   $_SESSION['google_access_token'] = $google_access_token;
 
   // Guardar (o actualizar) el usuario y sus tokens en la base de datos
-  require_once __DIR__ . '/../backend/usuarios.php';
+  require_once __DIR__ . '/backend/usuarios.php';
   guardar_usuario_en_bd($id, $name, $email, $google_access_token);
 
   // Redirigir a una URL limpia (PRG): el código de Google solo vale una vez
@@ -71,7 +71,7 @@ if (!isset($_SESSION['usuario'])) {
     <?php
     // Cargar las variables de entorno para leer el App ID público de OneSignal.
     // Este App ID no es un secreto: el navegador lo necesita para suscribirse.
-    require_once __DIR__ . '/../backend/google-login-config.php';
+    require_once __DIR__ . '/backend/google-login-config.php';
     $onesignal_app_id = $_ENV['ONESIGNAL_APP_ID'] ?? '';
     $onesignal_google_id = $_SESSION['google_id'] ?? '';
     ?>
@@ -84,7 +84,7 @@ if (!isset($_SESSION['usuario'])) {
             await OneSignal.init({
                 appId: <?php echo json_encode($onesignal_app_id); ?>,
                 // El worker de OneSignal vive en subcarpeta para no interferir
-                // con el service worker de la PWA (frontend/service-worker.js)
+                // con el service worker de la PWA (service-worker.js)
                 serviceWorkerPath: 'onesignal/OneSignalSDKWorker.js',
                 serviceWorkerParam: { scope: '/onesignal/' },
             });
@@ -127,7 +127,7 @@ if (!isset($_SESSION['usuario'])) {
             <div class="selectores-fecha"></div>
         </div>
 
-        <!-- La rejilla semanal se pinta desde frontend/scripts/dashboard.js -->
+        <!-- La rejilla semanal se pinta desde scripts/dashboard.js -->
         <div class="rejilla-semana" id="rejilla_semana"></div>
     </main>
 
@@ -217,11 +217,11 @@ if (!isset($_SESSION['usuario'])) {
                         <span class="material-symbols-outlined accion-icono">home</span>
                         Volver al inicio
                     </a>
-                    <a class="accion" href="../backend/cambiar_cuenta.php">
+                    <a class="accion" href="backend/cambiar_cuenta.php">
                         <span class="material-symbols-outlined accion-icono">loop</span>
                         Cambiar de cuenta
                     </a>
-                    <a class="accion" href="../backend/logout.php">
+                    <a class="accion" href="backend/logout.php">
                         <span class="material-symbols-outlined accion-icono">logout</span>
                         Cerrar sesión
                     </a>

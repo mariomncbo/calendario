@@ -6,5 +6,5 @@ session_unset();
 session_destroy();
 
 // Volver al login público
-header("Location: ../frontend/index.php");
+header("Location: ../index.php");
 exit();

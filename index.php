@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1>Index</h1>
-    <?php require __DIR__ . '/../backend/google-login-autentificacion.php'?>
+    <?php require __DIR__ . '/backend/google-login-autentificacion.php'?>
     <a href="<?php echo $client->createAuthUrl() ?>">Iniciar sesión con Google</a>
 </body>
 </html>

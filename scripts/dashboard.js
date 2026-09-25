@@ -8,7 +8,7 @@
 const NOMBRE_DIAS = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
 
 // URL del endpoint que devuelve los datos de la semana en JSON
-const URL_DATOS = '../backend/obtener_semana.php';
+const URL_DATOS = 'backend/obtener_semana.php';
 
 // Píxeles que ocupa una hora dentro de la línea de tiempo
 const ALTURA_POR_HORA = 40;
@@ -141,8 +141,8 @@ window.onload = function () {
   });
 
   // --- Notificación diaria (se guarda en el backend y se agenda en OneSignal) ---
-  const URL_PREFERENCIAS = '../backend/guardar_preferencias.php';
-  const URL_PROGRAMAR = '../backend/programar_notificacion.php';
+  const URL_PREFERENCIAS = 'backend/guardar_preferencias.php';
+  const URL_PROGRAMAR = 'backend/programar_notificacion.php';
   const HORA_DEFECTO_NOTIFICACION = '08:00';
 
   // La hora aún no aceptada: el botón se habilita al modificar el selector
@@ -276,7 +276,7 @@ window.onload = function () {
       return;
     }
 
-    fetch('../backend/delete-account.php', { method: 'POST' })
+    fetch('backend/delete-account.php', { method: 'POST' })
       .then((respuesta) => {
         if (!respuesta.ok) {
           throw new Error('El servidor respondió con el estado ' + respuesta.status);
@@ -328,7 +328,7 @@ window.onload = function () {
 
   // Registrar el service worker para permitir instalar la app como PWA
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('../service-worker.js').catch(function (error) {
+    navigator.serviceWorker.register('service-worker.js').catch(function (error) {
       console.error('No se pudo registrar el service worker:', error);
     });
   }
