@@ -19,9 +19,6 @@ const HORA_FIN_RANGO = 24;
 // En la primera carga del móvil el scroll se sitúa en el día de hoy
 let desplazarse_a_hoy = true;
 
-// Evita inicializar la UI de la notificación más de una vez por visita
-let preferencias_notificacion_inicializadas = false;
-
 window.onload = function () {
   const rejilla_semana = document.getElementById('rejilla_semana');
   const titulo_semana = document.getElementById('titulo_semana');
@@ -34,10 +31,6 @@ window.onload = function () {
 
   // --- Controles del modal de ajustes ---
   const interruptor_ocultar_tareas = document.getElementById('interruptor_ocultar_tareas');
-  const interruptor_notificacion_diaria = document.getElementById('interruptor_notificacion_diaria');
-  const selector_hora_notificacion = document.getElementById('selector_hora_notificacion');
-  const entrada_hora_notificacion = document.getElementById('entrada_hora_notificacion');
-  const boton_aceptar_hora = document.getElementById('boton_aceptar_hora');
   const boton_borrar_cuenta = document.getElementById('boton_borrar_cuenta');
 
   // --- Preferencia de tema (claro / oscuro / automático) ---
@@ -138,133 +131,6 @@ window.onload = function () {
     const activo = localStorage.getItem(CLAVE_OCULTAR_TAREAS) !== 'true';
     localStorage.setItem(CLAVE_OCULTAR_TAREAS, activo ? 'true' : 'false');
     aplicar_ocultar_tareas(activo);
-  });
-
-  // --- Notificación diaria (se guarda en el backend y se agenda en OneSignal) ---
-  const URL_PREFERENCIAS = 'backend/guardar_preferencias.php';
-  const URL_PROGRAMAR = 'backend/programar_notificacion.php';
-  const HORA_DEFECTO_NOTIFICACION = '08:00';
-
-  // La hora aún no aceptada: el botón se habilita al modificar el selector
-  boton_aceptar_hora.disabled = true;
-
-  /**
-   * Aplica el estado del interruptor de notificación y muestra u oculta
-   * el selector de hora justo debajo.
-   *
-   * @param {boolean} activo  true si la notificación diaria está activa.
-   */
-  function aplicar_notificacion_diaria(activo) {
-    interruptor_notificacion_diaria.setAttribute('aria-checked', activo ? 'true' : 'false');
-    selector_hora_notificacion.hidden = !activo;
-  }
-
-  /**
-   * Inicializa el estado de la notificación a partir de las preferencias que
-   * devuelve obtener_semana y, si está activa, re-agenda al abrir la app para
-   * refrescar el contenido del aviso.
-   *
-   * @param {Object|null} preferencias  Objeto con daily_notifications_active y hora_notificacion.
-   */
-  function aplicar_preferencias_desde_backend(preferencias) {
-    if (!preferencias || preferencias_notificacion_inicializadas) {
-      return;
-    }
-    preferencias_notificacion_inicializadas = true;
-
-    const activo = preferencias.daily_notifications_active === 1;
-    aplicar_notificacion_diaria(activo);
-
-    if (preferencias.hora_notificacion) {
-      entrada_hora_notificacion.value = preferencias.hora_notificacion;
-    }
-    boton_aceptar_hora.disabled = Boolean(preferencias.hora_notificacion);
-    boton_aceptar_hora.textContent = preferencias.hora_notificacion ? '✓' : 'Aceptar';
-
-    // Al abrir la app se re-programa el aviso con el contenido más reciente
-    if (activo) {
-      fetch(URL_PROGRAMAR, { method: 'POST' })
-        .then((respuesta) => {
-          if (!respuesta.ok) {
-            throw new Error('El servidor respondió con el estado ' + respuesta.status);
-          }
-          return respuesta.json();
-        })
-        .then((datos) => {
-          if (!datos.success) {
-            throw new Error('La API devolvió un error: ' + JSON.stringify(datos.errores));
-          }
-        })
-        .catch((error) => {
-          // Los errores solo se muestran por consola
-          console.error('No se pudo re-agendar la notificación:', error);
-        });
-    }
-  }
-
-  // Exponer la inicialización para que cargar_semana la invoque con datos.preferencias
-  window.__aplicar_preferencias_notificacion = aplicar_preferencias_desde_backend;
-
-  /**
-   * Guarda las preferencias de notificación en el backend, que programa o
-   * cancela el envío pendiente en OneSignal.
-   *
-   * @param {Object} cuerpo  Campos: daily_notifications_active y/o hora_notificacion.
-   */
-  function guardar_preferencias_notificacion(cuerpo) {
-    fetch(URL_PREFERENCIAS, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cuerpo),
-    })
-      .then((respuesta) => {
-        if (!respuesta.ok) {
-          throw new Error('El servidor respondió con el estado ' + respuesta.status);
-        }
-        return respuesta.json();
-      })
-      .then((datos) => {
-        if (!datos.success) {
-          throw new Error('La API devolvió un error: ' + JSON.stringify(datos.errores));
-        }
-      })
-      .catch((error) => {
-        // Los errores solo se muestran por consola
-        console.error('No se pudieron guardar las preferencias:', error);
-      });
-  }
-
-  // Al activar o desactivar la notificación se guarda en el backend
-  interruptor_notificacion_diaria.addEventListener('click', function () {
-    const activo = interruptor_notificacion_diaria.getAttribute('aria-checked') === 'true';
-    const nuevo_estado = activo ? 0 : 1;
-    aplicar_notificacion_diaria(nuevo_estado === 1);
-
-    const cuerpo = { daily_notifications_active: nuevo_estado };
-    if (nuevo_estado === 1) {
-      // Al activarla se agenda con la hora actual del selector
-      cuerpo.hora_notificacion = entrada_hora_notificacion.value || HORA_DEFECTO_NOTIFICACION;
-    }
-    guardar_preferencias_notificacion(cuerpo);
-  });
-
-  // Al modificar la hora, se habilita el botón para poder aceptarla
-  entrada_hora_notificacion.addEventListener('input', function () {
-    boton_aceptar_hora.disabled = false;
-    boton_aceptar_hora.textContent = 'Aceptar';
-  });
-
-  // Guardar la hora elegida y re-agendar al pulsar Aceptar
-  boton_aceptar_hora.addEventListener('click', function () {
-    const hora = entrada_hora_notificacion.value;
-    if (!hora) {
-      console.error('La hora de notificación está vacía.');
-      return;
-    }
-
-    guardar_preferencias_notificacion({ daily_notifications_active: 1, hora_notificacion: hora });
-    boton_aceptar_hora.disabled = true;
-    boton_aceptar_hora.textContent = '✓';
   });
 
   // --- Borrar cuenta: elimina los datos del usuario de la base de datos ---
@@ -376,11 +242,6 @@ function cargar_semana(desplazamiento, rejilla, titulo) {
       }
 
       renderizar_semana(datos, rejilla, titulo);
-
-      // Inicializar las preferencias de notificación con los datos del backend
-      if (typeof window.__aplicar_preferencias_notificacion === 'function') {
-        window.__aplicar_preferencias_notificacion(datos.preferencias);
-      }
     })
     .catch((error) => {
       // Los errores solo se muestran por consola

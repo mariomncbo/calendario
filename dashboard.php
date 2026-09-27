@@ -67,37 +67,6 @@ if (!isset($_SESSION['usuario'])) {
             }
         })();
     </script>
-
-    <?php
-    // Cargar las variables de entorno para leer el App ID público de OneSignal.
-    // Este App ID no es un secreto: el navegador lo necesita para suscribirse.
-    require_once __DIR__ . '/backend/google-login-config.php';
-    $onesignal_app_id = $_ENV['ONESIGNAL_APP_ID'] ?? '';
-    $onesignal_google_id = $_SESSION['google_id'] ?? '';
-    ?>
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-        // Inicializar OneSignal con el App ID público y fijar la identidad del
-        // usuario para poder dirigirle las notificaciones individualmente.
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function (OneSignal) {
-            await OneSignal.init({
-                appId: <?php echo json_encode($onesignal_app_id); ?>,
-                // El worker de OneSignal vive en subcarpeta para no interferir
-                // con el service worker de la PWA (service-worker.js)
-                serviceWorkerPath: 'onesignal/OneSignalSDKWorker.js',
-                serviceWorkerParam: { scope: '/onesignal/' },
-            });
-            <?php if ($onesignal_google_id !== ''): ?>
-            try {
-                OneSignal.User.addAlias({ external_id: <?php echo json_encode($onesignal_google_id); ?> });
-            } catch (error) {
-                // Los errores solo se muestran por consola
-                console.error('No se pudo fijar la identidad en OneSignal:', error);
-            }
-            <?php endif; ?>
-        });
-    </script>
 </head>
 <body>
     <header class="encabezado">
@@ -135,7 +104,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="barra-pie"></div>
     </footer>
 
-    <!-- Ventana de ajustes: tema, notificaciones, preferencias y cuenta -->
+    <!-- Ventana de ajustes: tema, preferencias y cuenta -->
     <div class="fondo-modal" id="fondo_modal">
         <div class="ventana-modal" id="ventana_modal" role="dialog" aria-modal="true" aria-label="Ajustes">
             <div class="cabecera-modal">
@@ -156,42 +125,6 @@ if (!isset($_SESSION['usuario'])) {
                     <button class="opcion-modo" data-tema="claro" role="radio">Claro</button>
                     <button class="opcion-modo" data-tema="oscuro" role="radio">Oscuro</button>
                     <button class="opcion-modo" data-tema="automatico" role="radio">Automático</button>
-                </div>
-            </div>
-
-            <div class="seccion-ajustes">
-                <span class="etiqueta-seccion">Notificaciones</span>
-                <div class="lista-acciones">
-                    <div class="fila-interruptor">
-                        <div class="fila-interruptor-texto">
-                            <span class="material-symbols-outlined accion-icono">notifications</span>
-                            Notificación diaria
-                            <div class="contenedor-ayuda">
-                                <button class="boton-ayuda" id="boton_ayuda_notificacion" type="button" aria-label="¿Qué envía la notificación diaria?" aria-describedby="tooltip_notificacion">
-                                    <span class="material-symbols-outlined accion-icono">help</span>
-                                </button>
-                                <div class="tooltip" id="tooltip_notificacion" role="tooltip">
-                                    Envía cada día un aviso con los eventos y tareas de ese día, ordenados por hora.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila-interruptor-controles">
-                            <button class="interruptor" id="interruptor_notificacion_diaria" role="switch" aria-checked="false" aria-label="Notificación diaria">
-                                <span class="interruptor-pista" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Selector de hora de la notificación: se muestra al activar el interruptor -->
-                    <div class="selector-hora-notificacion" id="selector_hora_notificacion" hidden>
-                        <span class="material-symbols-outlined accion-icono">schedule</span>
-                        <div class="selector-hora-campos">
-                            <label class="etiqueta-hora" for="entrada_hora_notificacion">Elegir hora del día</label>
-                            <div class="selector-hora-controles">
-                                <input type="time" class="entrada-hora" id="entrada_hora_notificacion" value="08:00" aria-label="Hora de la notificación diaria">
-                                <button class="boton-aceptar" id="boton_aceptar_hora" type="button" disabled>&check;</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 

@@ -14,12 +14,6 @@ CREATE TABLE users (
     
     token_expires_at DATETIME,
     
-    onesignal_sub_id VARCHAR(255) DEFAULT NULL,
-    
-    daily_notifications_active TINYINT(1) NOT NULL DEFAULT 1,
-    hora_notificacion TIME DEFAULT NULL,
-    notificacion_pendiente_id VARCHAR(255) DEFAULT NULL,
-    
     -- Trazabilidad básica
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

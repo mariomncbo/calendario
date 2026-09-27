@@ -907,12 +907,6 @@ a {
   color: var(--texto-principal);
 }
 
-.fila-interruptor-controles {
-  display: flex;
-  align-items: center;
-  gap: var(--espacio-xs);
-}
-
 /* Interruptor on-off */
 .interruptor {
   display: inline-flex;
@@ -957,88 +951,6 @@ a {
   transform: translateX(16px);
 }
 
-/* Selector de hora de la notificación diaria */
-.selector-hora-notificacion {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--espacio-sm);
-  padding: var(--espacio-md) var(--espacio-md) var(--espacio-md) calc(var(--espacio-md) + var(--espacio-md));
-  border-top: 1px solid var(--contorno-variante);
-}
-
-.selector-hora-notificacion[hidden] {
-  display: none;
-}
-
-.selector-hora-campos {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-sm);
-  flex: 1;
-  min-width: 0;
-}
-
-.etiqueta-hora {
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 20px;
-  color: var(--texto-variante);
-}
-
-.selector-hora-controles {
-  display: flex;
-  align-items: center;
-  gap: var(--espacio-sm);
-}
-
-.entrada-hora {
-  padding: var(--espacio-xs) var(--espacio-sm);
-  border: 1px solid var(--contorno-variante);
-  border-radius: var(--radio-base);
-  background-color: var(--superficie-mas-baja);
-  color: var(--texto-principal);
-  font-family: var(--fuente);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 20px;
-  transition-property: border-color;
-  transition-duration: 150ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.entrada-hora:focus {
-  outline: none;
-  border-color: var(--secundario);
-}
-
-.boton-aceptar {
-  padding: var(--espacio-xs) var(--espacio-md);
-  border: none;
-  border-radius: var(--radio-base);
-  background-color: var(--primario);
-  color: var(--sobre-primario);
-  font-family: var(--fuente);
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 16px;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition-property: background-color, color;
-  transition-duration: 150ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.boton-aceptar:hover {
-  background-color: var(--contenedor-primario);
-}
-
-.boton-aceptar:disabled {
-  background-color: var(--secundario);
-  color: var(--sobre-secundario);
-  opacity: 0.8;
-  cursor: default;
-}
-
 /* Acción de peligro: destacada con el color de error */
 .accion--peligro {
   color: var(--error);
@@ -1055,67 +967,6 @@ a {
 
 .accion--peligro:hover .accion-icono {
   color: var(--sobre-contenedor-error);
-}
-
-/* Contenedor del botón de ayuda (?) y su tooltip */
-.contenedor-ayuda {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.boton-ayuda {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: none;
-  border-radius: var(--radio-completo);
-  background-color: var(--superficie-media);
-  color: var(--contorno);
-  cursor: pointer;
-  transition-property: background-color, color;
-  transition-duration: 150ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.boton-ayuda:hover {
-  background-color: var(--superficie-alta);
-  color: var(--texto-principal);
-}
-
-.boton-ayuda .material-symbols-outlined {
-  font-size: 14px;
-  pointer-events: none;
-}
-
-/* Tooltip: aparece al pasar el ratón por encima o al enfocar con teclado */
-.tooltip {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  z-index: 10;
-  width: 220px;
-  padding: var(--espacio-sm) var(--espacio-md);
-  border-radius: var(--radio-lg);
-  background-color: var(--primario);
-  color: var(--sobre-primario);
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 16px;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition-property: opacity, visibility;
-  transition-duration: 150ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.contenedor-ayuda:hover .tooltip,
-.contenedor-ayuda:focus-within .tooltip {
-  opacity: 1;
-  visibility: visible;
 }
 
 /* Ocultar las secciones de tareas del calendario */
