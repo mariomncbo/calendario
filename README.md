@@ -1,4 +1,8 @@
-# Calendario Web App
+<div align="center">
+  <img src="src/img/icon.png" alt="Calendario Web App" width="120" />
+  <h1>Calendario Web App</h1>
+</div>
+
 
 Una aplicación web personal y minimalista diseñada para visualizar la semana actual unificando los eventos de Google Calendar y las tareas de Google Tasks.
 
