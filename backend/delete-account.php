@@ -5,6 +5,7 @@
 header('Content-Type: application/json');
 
 require_once __DIR__ . '/conexion.php';
+require_once __DIR__ . '/gestion-sesion.php';
 
 session_start();
 
@@ -27,14 +28,17 @@ if (!isset($_SESSION['usuario']) || !isset($_SESSION['google_id'])) {
 }
 
 try {
-    // Borrar el usuario y sus tokens de la base de datos
+    // Guardar el identificador antes de destruir la sesión para poder usarlo
+    $google_id = $_SESSION['google_id'];
+
+    // Borrar el usuario y sus tokens de la base de datos. La clave foránea en
+    // cascada elimina además sus dispositivos recordados.
     $sql = "DELETE FROM users WHERE google_id = :google_id";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([':google_id' => $_SESSION['google_id']]);
+    $stmt->execute([':google_id' => $google_id]);
 
-    // Cerrar la sesión activa
-    session_unset();
-    session_destroy();
+    // Cerrar la sesión y revocar los dispositivos recordados
+    cerrar_sesion($google_id);
 
     $respuesta = ['success' => true, 'errores' => []];
 } catch (PDOException $e) {

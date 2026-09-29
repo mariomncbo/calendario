@@ -8,6 +8,7 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/conexion.php';
 require_once __DIR__ . '/google-login-config.php';
 require_once __DIR__ . '/usuarios.php';
+require_once __DIR__ . '/gestion-sesion.php';
 
 session_start();
 
@@ -34,7 +35,18 @@ if (!is_numeric($desplazamiento) || (int) $desplazamiento < 0) {
 }
 $desplazamiento = (int) $desplazamiento;
 
-// Debe existir una sesión activa con los tokens de Google
+// Debe existir una sesión activa con los tokens de Google.
+//
+// Antes de exigirla se intenta reconstruir. La PWA se abre en frío y este
+// endpoint se pide en cuanto dashboard.php pinta la rejilla, así que la sesión
+// de PHP puede no existir todavía aunque el usuario esté identificado en la
+// base de datos. Sin esta reconstrucción devolvía 401 y el calendario salía
+// vacío en el primer arranque.
+if (!isset($_SESSION['usuario']) || !isset($_SESSION['google_access_token'])) {
+    restaurar_sesion_desde_bd();
+}
+
+// La rehidratación no ha sido posible: sin sesión no se pueden pedir datos
 if (!isset($_SESSION['usuario']) || !isset($_SESSION['google_access_token'])) {
     http_response_code(401);
     $respuesta['errores'][] = 'No hay sesión activa.';

@@ -1,5 +1,15 @@
 <?php
-session_start();
+// Rehidratación de sesión y cookie del dispositivo recordado
+require_once __DIR__ . '/backend/gestion-sesion.php';
+
+// La cookie de sesión de PHP solo vive mientras el navegador esté abierto, lo
+// que en la PWA del móvil significa que se pierde en cuanto se cierra la app.
+// iniciar_sesion() la amplía a 30 días para evitar re-logueos innecesarios.
+// OJO: esto solo agranda el plazo, no lo elimina. El fichero de sesión lo
+// recolecta igualmente a los 24 minutos (session.gc_maxlifetime) y ese valor no
+// se puede cambiar en hosting compartido, así que la garantía de no perder la
+// sesión la da restaurar_sesion_desde_bd() más abajo, no esta cookie.
+iniciar_sesion();
 
 // Intercambiar el código de Google por tokens y perfil, si venimos del login
 require_once __DIR__ . '/backend/google-login-autentificacion.php';
@@ -12,8 +22,14 @@ if (isset($google_access_token)) {
   $_SESSION['google_access_token'] = $google_access_token;
 
   // Guardar (o actualizar) el usuario y sus tokens en la base de datos
-  require_once __DIR__ . '/backend/usuarios.php';
   guardar_usuario_en_bd($id, $name, $email, $google_access_token);
+
+  // Marcar este dispositivo como recordado: se guarda solo el hash del token,
+  // que permitirá reconstruir la sesión si PHP la pierde más adelante.
+  $token_dispositivo = registrar_dispositivo($id);
+  if ($token_dispositivo !== null) {
+    emitir_cookie_dispositivo($token_dispositivo);
+  }
 
   // Redirigir a una URL limpia (PRG): el código de Google solo vale una vez
   header("Location: dashboard.php");
@@ -25,6 +41,11 @@ if (isset($_GET['error'])) {
   header("Location: index.php?error=login_denegado");
   exit();
 }
+
+// Si la sesión de PHP se ha perdido, intentar reconstruirla desde la base de
+// datos con el token del dispositivo ANTES de expulsar al usuario. Sin esto,
+// cualquier caducidad de la sesión lo devolvía al login.
+restaurar_sesion_desde_bd();
 
 // Control de acceso: sin sesión activa se vuelve al login
 if (!isset($_SESSION['usuario'])) {
